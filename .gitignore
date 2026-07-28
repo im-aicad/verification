@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.CATPart
+*.CATProduct
+*_pycache_/
+*.png
+*.xlsx
+*.docx
+**/build/
+**/dist/
+**/dist_*/
+**/session.json
+**/output

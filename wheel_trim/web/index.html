@@ -1,0 +1,3947 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>车轮罩法规校核工作台</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0">
+<script defer src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --color-bg-1: #eef1f5;
+  --color-bg-2: rgba(255, 255, 255, 0.72);
+  --color-bg-3: rgba(245, 246, 250, 0.86);
+  --color-fill-1: rgba(255, 255, 255, 0.72);
+  --color-fill-2: rgba(223, 227, 236, 0.9);
+  --color-border-1: rgba(15, 23, 42, 0.08);
+  --color-border-2: rgba(15, 23, 42, 0.12);
+  --color-text-1: #1d1f24;
+  --color-text-2: #4a4e59;
+  --color-text-3: #7f8491;
+  --color-text-4: #adb2bd;
+  --color-primary-6: #4f7cff;
+  --color-primary-1: rgba(79, 124, 255, 0.16);
+  --color-success-6: #22c55e;
+  --color-success-1: rgba(34, 197, 94, 0.14);
+  --color-warning-6: #f59e0b;
+  --color-danger-6: #f43f5e;
+  --shadow-1: 0 14px 34px rgba(15, 23, 42, 0.08);
+  --shadow-2: 0 20px 48px rgba(15, 23, 42, 0.12);
+  --radius-xs: 4px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --main-panel-height: 720px;
+  --transition: 0.18s ease;
+}
+
+body[data-theme="dark"] {
+  --color-bg-1: #0f1115;
+  --color-bg-2: #15181e;
+  --color-bg-3: #1b1f27;
+  --color-fill-1: #232936;
+  --color-fill-2: #31394b;
+  --color-border-1: rgba(255, 255, 255, 0.08);
+  --color-border-2: rgba(255, 255, 255, 0.16);
+  --color-text-1: #f4f4f5;
+  --color-text-2: #d4d4d8;
+  --color-text-3: #a1a1aa;
+  --color-text-4: #71717a;
+  --color-primary-1: rgba(139, 92, 246, 0.2);
+  --shadow-1: 0 8px 24px rgba(0, 0, 0, 0.32);
+  --shadow-2: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5715;
+  color: var(--color-text-1);
+  background: rgba(0, 0, 0, 0.05);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: none;
+  background: none;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 0;
+}
+
+.app-frame {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.top-nav {
+  min-height: 64px;
+  padding: 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border-1);
+  background: #ffffff;
+  backdrop-filter: blur(24px) saturate(145%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+body[data-theme="dark"] .top-nav {
+  background: rgba(21, 24, 30, 0.78);
+}
+
+.top-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.top-nav-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: linear-gradient(180deg, #ffffff 0%, #e9edf5 100%);
+  color: #1d1f24;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.top-nav-copy {
+  min-width: 0;
+}
+
+.top-nav-title {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+
+.top-nav-subtitle {
+  font-size: 12px;
+  line-height: 1.3333;
+  color: var(--color-text-3);
+}
+
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.docs-shell {
+  flex: 1;
+  min-height: 0;
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.top-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-1);
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  color: var(--color-text-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.top-avatar .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.meta-chip,
+.status-pill,
+.signal-chip {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-1);
+  background: #ffffff;
+  backdrop-filter: blur(18px) saturate(140%);
+  color: var(--color-text-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.3333;
+}
+
+.top-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-1);
+  background: #ffffff;
+  backdrop-filter: blur(18px) saturate(140%);
+  color: var(--color-text-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.top-icon-btn:hover {
+  border-color: var(--color-primary-6);
+  color: var(--color-primary-6);
+}
+
+.status-pill.on {
+  color: var(--color-success-6);
+  background: var(--color-success-1);
+  border-color: rgba(0, 180, 42, 0.18);
+}
+
+.status-pill.off {
+  color: var(--color-text-3);
+}
+
+.status-dot,
+.pulse-ring {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-pill.on .status-dot,
+.pulse-ring {
+  background: var(--color-success-6);
+}
+
+.status-pill.off .status-dot {
+  background: var(--color-text-4);
+}
+
+.pulse-ring {
+  box-shadow: 0 0 0 4px rgba(0, 180, 42, 0.12);
+  animation: pulse 1.8s infinite;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.78fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--space-4);
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+  padding: var(--space-4);
+  background: transparent;
+  overflow: hidden;
+}
+
+.visual-stack,
+.chat-stack {
+  min-height: 0;
+}
+
+.visual-stack {
+  display: contents;
+}
+
+.panel,
+.ai-dialog,
+.log-dialog {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(28px) saturate(145%);
+}
+
+#fileSelectModal .log-dialog {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+body[data-theme="dark"] .panel,
+body[data-theme="dark"] .ai-dialog,
+body[data-theme="dark"] .log-dialog {
+  background: rgba(21, 24, 30, 0.96);
+}
+
+.hero-panel {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 96px);
+  min-height: calc(100vh - 96px);
+  max-height: calc(100vh - 96px);
+  min-height: 0;
+  overflow: hidden;
+  gap: var(--space-4);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.hero-topline,
+.dock-topline,
+.ai-dialog-header,
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border-1);
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.hero-topline {
+  padding: 0;
+  border-bottom: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hero-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: nowrap;
+  width: 100%;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.hero-meta,
+.card-title {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hero-viewport {
+  padding: 0;
+  background: transparent;
+  flex: 1;
+  min-height: 0;
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid #2b2f36;
+  background: #15181e;
+  box-shadow: 0 22px 52px rgba(15, 23, 42, 0.16);
+}
+
+.vp-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0 16px;
+  background: #1f2329;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 10;
+}
+
+.vp-bar-left,
+.vp-bar-right,
+.vp-window-copy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vp-window-copy {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.vp-traffic {
+  display: flex;
+  gap: 6px;
+}
+
+.vp-traffic span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.vp-window-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.vp-bar-title {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 500;
+}
+
+.vp-bar-angle {
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.72);
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-family: var(--mono);
+}
+
+.vp-bar-action {
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.vp-bar-action:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.vp-bar-action .material-symbols-outlined {
+  font-size: 15px;
+}
+
+.viewport-stage {
+  position: absolute;
+  inset: 48px 0 0 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+}
+
+.viewport-placeholder {
+  width: min(92%, 680px);
+  min-height: 72%;
+  position: relative;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: block;
+  overflow: hidden;
+}
+
+.placeholder-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(122, 162, 255, 0.18), transparent 24%),
+    radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.14), transparent 18%),
+    radial-gradient(circle at 50% 100%, rgba(79, 124, 255, 0.12), transparent 34%);
+}
+
+.placeholder-device {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(64%, 380px);
+  height: 62%;
+  transform: translate(-50%, -52%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(31, 35, 41, 0.96), rgba(20, 23, 29, 0.98));
+  box-shadow:
+    0 24px 50px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.placeholder-device::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 18px;
+  height: 34px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.placeholder-device::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 72px;
+  bottom: 20px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+    radial-gradient(circle at 50% 35%, rgba(122, 162, 255, 0.18), transparent 30%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.placeholder-traffic {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  display: flex;
+  gap: 6px;
+}
+
+.placeholder-traffic span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.placeholder-panel {
+  position: absolute;
+  right: 26px;
+  top: 30px;
+  width: 188px;
+  padding: 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16);
+}
+
+.placeholder-panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.placeholder-panel-sub {
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.56);
+}
+
+.placeholder-panel-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.placeholder-panel-item {
+  height: 34px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.placeholder-bottom-card {
+  display: none;
+}
+
+.placeholder-bottom-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.placeholder-bottom-sub {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.wireframe-badge {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-height: 26px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.78);
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  z-index: 2;
+}
+
+.placeholder-copy {
+  position: absolute;
+  left: 50%;
+  bottom: 38px;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 2;
+}
+
+.placeholder-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.01em;
+}
+
+.placeholder-subtitle {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.vp-live {
+  position: absolute;
+  inset: 48px 0 0 0;
+  width: 100%;
+  height: calc(100% - 48px);
+  object-fit: contain;
+  background: #000;
+  display: none;
+  z-index: 4;
+}
+
+.viewport.live .vp-live {
+  display: block;
+}
+
+.viewport-loading {
+  position: absolute;
+  inset: 48px 0 0 0;
+  background: rgba(10, 14, 20, 0.72);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
+}
+
+.viewport.loading .viewport-loading {
+  display: flex;
+}
+
+.viewport-loading-card {
+  min-width: 220px;
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.viewport-loading-spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+}
+
+.viewport-loading-text {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.vp-badge {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  z-index: 8;
+  min-width: 180px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.btn {
+  width: auto;
+  min-height: 46px;
+  padding: 10px 16px;
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-md);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(18px) saturate(140%);
+  color: var(--color-text-1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.btn:hover:not(:disabled) {
+  box-shadow: var(--shadow-1);
+}
+
+#btnUploadBtn:hover:not(:disabled),
+#btnUploadBtn:active:not(:disabled) {
+  box-shadow: none !important;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  color: rgba(29, 33, 41, 0.38);
+  background: rgba(29, 33, 41, 0.08);
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #7aa2ff 0%, #4f7cff 100%);
+  border-color: rgba(79, 124, 255, 0.28);
+  color: #fff;
+}
+
+#btnUploadBtn {
+  border-radius: 14px !important;
+  -webkit-border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #6f98ff 0%, #4473fb 100%);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.48);
+  color: var(--color-primary-6);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.44);
+  border-color: var(--color-border-2);
+  color: var(--color-text-2);
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--color-primary-6);
+  color: var(--color-primary-6);
+  background: rgba(22, 93, 255, 0.04);
+}
+
+.btn-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-icon .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.btn-primary .btn-icon {
+  color: #fff;
+}
+
+.btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  text-align: left;
+}
+
+.btn-label {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.chat-stack {
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 0;
+  display: flex;
+  align-self: stretch;
+}
+
+.chat-stack .ai-dialog {
+  width: 100%;
+  height: calc(100vh - 96px);
+  min-height: calc(100vh - 96px);
+  max-height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.ai-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+}
+
+.ai-dialog-title {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-clear-btn,
+.btn-sm {
+  min-height: 32px;
+  padding: 0 12px;
+  width: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-1);
+  background: rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(16px) saturate(135%);
+  color: var(--color-text-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-clear-btn:hover,
+.btn-sm:hover {
+  border-color: var(--color-primary-6);
+  color: var(--color-primary-6);
+  background: #ffffff;
+}
+
+.ai-messages {
+  flex: 1;
+  height: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-4);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ai-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ai-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-messages::-webkit-scrollbar-thumb {
+  background: rgba(78, 89, 105, 0.28);
+  border-radius: var(--radius-pill);
+}
+
+.ai-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(78, 89, 105, 0.42);
+}
+
+.message-item {
+  display: flex;
+  flex-direction: column;
+  max-width: 92%;
+  animation: fadeInUp 0.2s ease;
+}
+
+.message-item.system {
+  align-items: flex-start;
+}
+
+.message-item.user {
+  align-items: flex-end;
+  align-self: flex-end;
+}
+
+.message-bubble {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-1);
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text-1);
+  font-size: 14px;
+  line-height: 1.5715;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+body[data-theme="dark"] .message-bubble {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.message-bubble.loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.message-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.message-loader span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.28;
+  animation: messageDots 1.2s infinite ease-in-out;
+}
+
+.message-loader span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.message-loader span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.message-item.user .message-bubble {
+  background: linear-gradient(180deg, #7aa2ff 0%, #4f7cff 100%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.message-meta {
+  margin-top: 4px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-text-4);
+}
+
+.message-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.message-action-btn {
+  width: auto;
+  height: 24px;
+  min-height: 24px;
+  max-height: 24px;
+  min-width: 0;
+  padding: 0 12px;
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-md);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(18px) saturate(140%);
+  color: var(--color-text-1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 24px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.message-action-btn.primary {
+  background: linear-gradient(180deg, #7aa2ff 0%, #4f7cff 100%);
+  border-color: rgba(79, 124, 255, 0.28);
+  color: #fff;
+}
+
+.message-action-btn:hover {
+  box-shadow: var(--shadow-1);
+}
+
+.message-action-btn.primary:hover {
+  background: linear-gradient(180deg, #6f98ff 0%, #4473fb 100%);
+  color: #fff;
+}
+
+.message-action-btn:not(.primary):hover {
+  border-color: var(--color-primary-6);
+  color: var(--color-primary-6);
+  background: rgba(22, 93, 255, 0.04);
+}
+
+.message-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.dot-info { background: var(--color-primary-6); }
+.dot-success { background: var(--color-success-6); }
+.dot-warn { background: var(--color-warning-6); }
+.dot-error { background: var(--color-danger-6); }
+.dot-system { background: var(--color-text-4); }
+
+.empty-message-placeholder {
+  margin: auto;
+  text-align: center;
+  color: var(--color-text-3);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.ai-input-area {
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border-1);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: stretch;
+  background: #ffffff;
+}
+
+.ai-input-area > div {
+  display: flex;
+}
+
+.ai-input,
+.parameter-input,
+.file-group input[type="file"],
+.file-control {
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border-2);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(14px) saturate(140%);
+  color: var(--color-text-1);
+}
+
+.file-control {
+  height: 38px;
+  outline: none;
+}
+
+.file-control:focus {
+  border-color: var(--color-primary-6);
+  box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.12);
+}
+
+.file-control-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.file-unit-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-unit-label {
+  min-width: 34px;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border-2);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+@media (max-width: 640px) {
+  .file-control-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ai-input {
+  min-height: 44px;
+  height: 44px;
+  max-height: 44px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  line-height: 22px;
+  resize: none;
+  overflow: hidden;
+}
+
+.ai-input:focus,
+.parameter-input:focus {
+  outline: none;
+  border-color: var(--color-primary-6);
+  box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.12);
+}
+
+.ai-send-btn {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #7aa2ff 0%, #4f7cff 100%);
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-send-btn:disabled {
+  background: #94b7ff;
+  cursor: not-allowed;
+}
+
+.ai-send-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.log-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(29, 33, 41, 0.36);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 200;
+}
+
+.log-modal.open {
+  display: flex;
+}
+
+.log-dialog {
+  width: min(760px, 96vw);
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-group {
+  margin-bottom: 16px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border-1);
+}
+
+.file-group.required label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.required-mark {
+  color: var(--color-danger-6);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.file-group.error {
+  border-color: rgba(244, 63, 94, 0.4);
+  background: rgba(244, 63, 94, 0.05);
+}
+
+.file-group-error {
+  display: none;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--color-danger-6);
+}
+
+.file-group.error .file-group-error {
+  display: block;
+}
+
+.file-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.file-group .sub-file-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.file-group .file-desc {
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--color-text-3);
+}
+
+.file-group input[type="file"]::file-selector-button {
+  margin-right: 8px;
+  min-height: 28px;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text-2);
+  cursor: pointer;
+}
+
+.file-selection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.file-selection-item {
+  min-height: 34px;
+  padding: 6px 8px 6px 12px;
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-md);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.file-selection-name {
+  min-width: 0;
+  font-size: 12px;
+  color: var(--color-text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-remove-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-text-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.file-remove-btn:hover {
+  border-color: rgba(244, 63, 94, 0.18);
+  background: rgba(244, 63, 94, 0.08);
+  color: var(--color-danger-6);
+}
+
+.file-remove-btn .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.setting-row {
+  min-height: 72px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.58);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.setting-row strong {
+  display: block;
+  color: var(--color-text-1);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.setting-row small {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-text-3);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.setting-row input[type="checkbox"] {
+  width: 42px;
+  height: 24px;
+  accent-color: var(--color-primary-6);
+  cursor: pointer;
+}
+
+.setting-text-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.setting-text-row {
+  padding: 12px 14px;
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.58);
+  display: grid;
+  gap: 8px;
+}
+
+.setting-text-row label {
+  color: var(--color-text-2);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.setting-text-input {
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border-2);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: var(--color-text-1);
+  outline: none;
+}
+
+.setting-text-input:focus {
+  border-color: var(--color-primary-6);
+  box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.12);
+}
+
+.upload-progress {
+  display: none;
+  margin: 0 20px 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-1);
+  background: rgba(244, 245, 248, 0.76);
+}
+
+.upload-progress.visible {
+  display: block;
+}
+
+.upload-progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--color-text-2);
+}
+
+.upload-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.upload-progress-bar {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7c3aed 0%, #2563eb 100%);
+  transition: width 0.18s ease;
+}
+
+.version-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.version-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 8px 12px;
+  margin: 0 0 8px;
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-sm);
+}
+
+.version-select-all,
+.version-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-2);
+  font-size: 12px;
+}
+
+.version-select {
+  width: 24px;
+  min-width: 24px;
+  justify-content: center;
+}
+
+.version-select input,
+.version-select-all input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+
+.version-selected-count {
+  color: var(--color-text-3);
+  font-size: 12px;
+}
+
+.version-toolbar-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.version-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border-1);
+  flex-wrap: wrap;
+}
+
+.version-info {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.version-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.empty-version {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--color-text-3);
+}
+
+.preview-content {
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  background: var(--color-bg-2);
+  color: var(--color-text-1);
+  font-family: var(--font);
+}
+
+.preview-content table {
+  width: 100%;
+  margin: 12px 0;
+  border-collapse: collapse;
+}
+
+.preview-content td,
+.preview-content th {
+  border: 1px solid var(--color-border-2);
+  padding: 6px 8px;
+}
+
+.preview-content img {
+  max-width: 100%;
+}
+
+.docx-preview {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 28px 34px;
+  background: #fff;
+  color: #1f2329;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  line-height: 1.55;
+}
+
+.docx-preview p {
+  margin: 8px 0;
+  white-space: pre-wrap;
+}
+
+.docx-preview table {
+  width: 100%;
+  margin: 12px 0 18px;
+  border-collapse: collapse;
+}
+
+.docx-preview td,
+.docx-preview th {
+  border: 1px solid #d0d5dd;
+  padding: 6px 8px;
+  vertical-align: top;
+}
+
+.docx-preview img {
+  display: block;
+  max-width: 100%;
+  margin: 10px auto 16px;
+}
+
+.preview-error {
+  margin: 16px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: #fff2f0;
+  color: var(--color-danger-6);
+}
+
+.preview-sheet-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 0 12px 0;
+  border-bottom: 1px solid var(--color-border-1);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.preview-sheet-tab {
+  padding: 4px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-1);
+  background: var(--color-fill-1);
+  color: var(--color-text-2);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.preview-sheet-tab:hover {
+  border-color: var(--color-primary-6);
+  color: var(--color-primary-6);
+}
+
+.preview-sheet-tab.active {
+  background: var(--color-primary-6);
+  color: #fff;
+  border-color: var(--color-primary-6);
+}
+
+.preview-content th {
+  background: var(--color-fill-2);
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.preview-content td {
+  font-size: 13px;
+}
+
+.preview-content table img {
+  max-width: 200px;
+  max-height: 150px;
+}
+
+.guide-target-active {
+  position: relative;
+  z-index: 520;
+  box-shadow: 0 0 0 6px rgba(79, 124, 255, 0.14), 0 0 0 1px rgba(79, 124, 255, 0.28);
+  pointer-events: none;
+}
+
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 460;
+  display: none;
+  pointer-events: auto;
+}
+
+.onboarding-overlay.open {
+  display: block;
+}
+
+.onboarding-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.48);
+  display: block;
+}
+
+.onboarding-card {
+  position: fixed;
+  z-index: 461;
+  width: min(480px, calc(100vw - 32px));
+  border-radius: 22px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.onboarding-head {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  display: block;
+}
+
+.onboarding-copy {
+  min-width: 0;
+}
+
+.onboarding-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(79, 124, 255, 0.1);
+  color: var(--color-primary-6);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.onboarding-title {
+  margin-top: 10px;
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+
+.onboarding-subtitle {
+  display: none;
+}
+
+.onboarding-step-index {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text-2);
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.onboarding-body {
+  padding: 14px 18px 12px;
+}
+
+.onboarding-flow {
+  display: flex;
+  gap: 8px;
+}
+
+.onboarding-flow-item {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 10px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(0, 0, 0, 0.03);
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+
+.onboarding-flow-item.active {
+  border-color: rgba(79, 124, 255, 0.22);
+  background: rgba(79, 124, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.onboarding-flow-step {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--color-text-3);
+}
+
+.onboarding-flow-item.active .onboarding-flow-step {
+  color: var(--color-primary-6);
+}
+
+.onboarding-flow-title {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+
+.onboarding-flow-desc {
+  display: none;
+}
+
+.onboarding-focus {
+  margin-top: 12px;
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.onboarding-focus-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: rgba(79, 124, 255, 0.1);
+  color: var(--color-primary-6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.onboarding-focus-icon .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.onboarding-focus-label {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--color-text-3);
+}
+
+.onboarding-focus-title {
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+
+.onboarding-focus-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--color-text-2);
+}
+
+.onboarding-foot {
+  padding: 12px 18px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.onboarding-foot-note {
+  display: none;
+}
+
+.onboarding-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.onboarding-actions .btn {
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+.onboarding-actions.is-first-step #onboardingSkipBtn,
+.onboarding-actions.is-first-step #onboardingNextBtn {
+  flex: 1 1 0;
+}
+
+.onboarding-actions.is-first-step #onboardingPrevBtn {
+  display: none;
+}
+
+.onboarding-actions:not(.is-first-step) #onboardingSkipBtn,
+.onboarding-actions:not(.is-first-step) #onboardingPrevBtn,
+.onboarding-actions:not(.is-first-step) #onboardingNextBtn {
+  flex: 1 1 0;
+}
+
+body.onboarding-open {
+  overflow: hidden;
+}
+
+@media (max-width: 1360px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .hero-panel,
+  .chat-stack {
+    grid-column: 1;
+  }
+
+  .hero-panel {
+    grid-row: 1;
+  }
+
+  .chat-stack {
+    grid-row: 2;
+    align-self: stretch;
+  }
+
+  .chat-stack .ai-dialog {
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+  }
+}
+
+@media (max-width: 980px) {
+  .top-nav {
+    padding: 12px var(--space-4);
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .top-nav-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .hero-panel,
+  .chat-stack .ai-dialog {
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+  }
+
+  .viewport {
+    min-height: 100%;
+  }
+
+  .viewport-placeholder {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .hero-topline,
+  .ai-dialog-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hero-toolbar,
+  .hero-actions,
+  .hero-meta {
+    width: 100%;
+  }
+
+  .hero-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .workspace {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .ai-input-area {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-send-btn {
+    width: 100%;
+  }
+
+  .hero-panel,
+  .chat-stack .ai-dialog {
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+  }
+
+  .onboarding-overlay {
+    pointer-events: auto;
+  }
+
+  .onboarding-head,
+  .onboarding-body,
+  .onboarding-foot {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .onboarding-head,
+  .onboarding-foot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .onboarding-title {
+    font-size: 24px;
+  }
+
+  .onboarding-actions {
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes messageDots {
+  0%, 80%, 100% { opacity: 0.28; transform: scale(0.9); }
+  40% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <div class="app-frame">
+    <header class="top-nav">
+      <div class="top-nav-brand">
+        <span class="top-nav-logo" aria-hidden="true">
+          <span class="material-symbols-outlined">tire_repair</span>
+        </span>
+        <div class="top-nav-copy">
+          <div class="top-nav-title">车轮罩法规校核工作台</div>
+          <div class="top-nav-subtitle">CATIA V5 自动检测与结果文件归档</div>
+        </div>
+      </div>
+      <div class="top-nav-actions">
+        <div class="signal-chip"><span class="pulse-ring"></span><span id="footerStatus">就绪</span></div>
+        <span class="sr-status" id="footerMeta">等待任务启动</span>
+        <div class="top-actions">
+          <button class="top-icon-btn" type="button" aria-label="通知"><span class="material-symbols-outlined">notifications</span></button>
+          <button class="top-icon-btn" id="settingsButton" type="button" aria-label="设置" hidden><span class="material-symbols-outlined">settings</span></button>
+          <span class="top-avatar" aria-label="当前用户">
+            <span class="material-symbols-outlined">person</span>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <main class="visual-stack">
+        <section class="hero-panel">
+            <div class="hero-topline">
+              <div class="hero-toolbar">
+                <div class="hero-actions">
+                  <button class="btn btn-primary" id="btnUploadBtn" title="上传轮罩与车轮装配文件">
+                    <span class="btn-icon"><span class="material-symbols-outlined">upload_file</span></span>
+                    <span class="btn-text"><span class="btn-label">上传文件</span></span>
+                  </button>
+                  <button class="btn btn-secondary" id="btnStart" title="开始检测" disabled hidden>
+                    <span class="btn-icon"><span class="material-symbols-outlined">play_arrow</span></span>
+                    <span class="btn-text"><span class="btn-label">开始检测</span></span>
+                  </button>
+                  <button class="btn btn-secondary btn-outline" id="btnReset" title="清空当前状态并回到初始等待">
+                    <span class="btn-icon"><span class="material-symbols-outlined">restart_alt</span></span>
+                    <span class="btn-text"><span class="btn-label">重置</span></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-viewport">
+              <div class="viewport" id="viewport">
+                <div class="vp-bar">
+                  <div class="vp-bar-left">
+                    <div class="vp-traffic"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+                    <div class="vp-window-copy">
+                      <span class="vp-window-label">检测引擎</span>
+                      <span class="vp-bar-title" id="vpTitle">车轮罩法规校核</span>
+                    </div>
+                  </div>
+                  <div class="vp-bar-right">
+                    <span class="vp-bar-angle" id="vpAngle">待机</span>
+                  </div>
+                </div>
+                <div class="viewport-stage" aria-hidden="true">
+                  <div class="viewport-placeholder">
+                    <div class="placeholder-glow"></div>
+                    <span class="wireframe-badge">Wheelhouse Verification Ready</span>
+                    <div class="placeholder-device">
+                      <div class="placeholder-traffic">
+                        <span style="background:#ff5f57"></span>
+                        <span style="background:#febc2e"></span>
+                        <span style="background:#28c840"></span>
+                      </div>
+                    </div>
+                    <div class="placeholder-panel">
+                      <div class="placeholder-panel-title">检测控制台</div>
+                      <div class="placeholder-panel-sub">请先上传零件文件</div>
+                      <div class="placeholder-panel-list">
+                        <div class="placeholder-panel-item"></div>
+                        <div class="placeholder-panel-item"></div>
+                        <div class="placeholder-panel-item"></div>
+                      </div>
+                    </div>
+                    <div class="placeholder-bottom-card">
+                      <div class="placeholder-bottom-title">未激活会话</div>
+                      <div class="placeholder-bottom-sub">上传轮罩零件和车轮装配后即可启动校核</div>
+                    </div>
+                  </div>
+                </div>
+                <video id="vpLive" class="vp-live" autoplay muted playsinline></video>
+                <div class="viewport-loading" id="viewportLoading">
+                  <div class="viewport-loading-card">
+                    <div class="viewport-loading-spinner" aria-hidden="true"></div>
+                    <div class="viewport-loading-text" id="viewportLoadingText">正在执行检测，请稍候...</div>
+                  </div>
+                </div>
+                <div class="vp-badge" id="vpInfo">状态: 待机<br>等待上传零件文件</div>
+              </div>
+            </div>
+
+          </section>
+      </main>
+
+      <aside class="chat-stack">
+        <section class="ai-dialog">
+            <div class="ai-dialog-header">
+              <div class="ai-dialog-title">日志助手</div>
+              <div class="chat-header-actions">
+                <button class="ai-clear-btn" id="btnVersionLib" title="预览、下载、删除历史结果文件"><span class="material-symbols-outlined" style="font-size:16px; margin-right:6px;">folder_managed</span>版本库</button>
+                <button class="ai-clear-btn" id="clearDialogBtn" title="清空对话记录"><span class="material-symbols-outlined" style="font-size:16px; margin-right:6px;">delete_sweep</span>清空记录</button>
+              </div>
+            </div>
+            <div class="ai-messages" id="aiMessagesContainer"><div class="empty-message-placeholder">等待检测流程启动<br>系统日志会在这里实时展开</div></div>
+            <div class="ai-input-area">
+              <div>
+                <textarea class="ai-input" id="aiUserInput" placeholder="输入消息..." rows="1" disabled></textarea>
+              </div>
+              <button class="ai-send-btn" id="aiSendBtn" disabled aria-label="发送消息">
+                <span class="material-symbols-outlined">arrow_upward</span>
+              </button>
+            </div>
+          </section>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<div class="onboarding-overlay" id="onboardingOverlay" aria-hidden="true">
+  <div class="onboarding-backdrop"></div>
+  <div class="onboarding-card" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+    <div class="onboarding-head">
+      <div class="onboarding-copy">
+        <span class="onboarding-badge">新手引导</span>
+        <div class="onboarding-title" id="onboardingTitle">车轮罩法规校核流程</div>
+      </div>
+      <div class="onboarding-step-index" id="onboardingStepIndex">01 / 04</div>
+    </div>
+    <div class="onboarding-body">
+      <div class="onboarding-flow" id="onboardingFlow"></div>
+      <div class="onboarding-focus">
+        <div class="onboarding-focus-icon">
+          <span class="material-symbols-outlined" id="onboardingFocusIcon">upload_file</span>
+        </div>
+        <div>
+          <div class="onboarding-focus-label" id="onboardingFocusLabel">当前引导</div>
+          <div class="onboarding-focus-title" id="onboardingFocusTitle">确认 CATIA 状态</div>
+          <div class="onboarding-focus-desc" id="onboardingFocusDesc">进入工作台后先查看日志助手中的 CATIA 状态提示，确保 CATIA 已打开或按提示启动后再继续。</div>
+        </div>
+      </div>
+    </div>
+    <div class="onboarding-foot">
+      <div class="onboarding-actions">
+        <button class="btn btn-outline" type="button" id="onboardingSkipBtn">跳过引导</button>
+        <button class="btn btn-primary" type="button" id="onboardingNextBtn">开始使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="log-modal" id="fileSelectModal">
+  <div class="log-dialog" style="width: 560px;">
+    <div class="card-header"><span class="card-title">选择车轮罩法规校核文件</span><button class="btn btn-secondary btn-sm" id="btnFileSelectClose">关闭</button></div>
+    <div style="padding: 20px; max-height: 70vh; overflow-y: auto;">
+      <div class="file-control-row">
+        <div class="file-group" id="leftFrontWheelhouseFileGroup"><label>左前轮罩零件</label><div class="file-desc">选择左前轮罩 `.CATPart` 文件</div><input type="file" id="leftFrontWheelhouseFile" accept=".CATPart,.catpart"><div class="file-selection-list" id="leftFrontWheelhouseFileList"></div></div>
+        <div class="file-group" id="rightFrontWheelhouseFileGroup"><label>右前轮罩零件</label><div class="file-desc">选择右前轮罩 `.CATPart` 文件</div><input type="file" id="rightFrontWheelhouseFile" accept=".CATPart,.catpart"><div class="file-selection-list" id="rightFrontWheelhouseFileList"></div></div>
+      </div>
+      <div class="file-control-row">
+        <div class="file-group" id="leftRearWheelhouseFileGroup"><label>左后轮罩零件</label><div class="file-desc">选择左后轮罩 `.CATPart` 文件</div><input type="file" id="leftRearWheelhouseFile" accept=".CATPart,.catpart"><div class="file-selection-list" id="leftRearWheelhouseFileList"></div></div>
+        <div class="file-group" id="rightRearWheelhouseFileGroup"><label>右后轮罩零件</label><div class="file-desc">选择右后轮罩 `.CATPart` 文件</div><input type="file" id="rightRearWheelhouseFile" accept=".CATPart,.catpart"><div class="file-selection-list" id="rightRearWheelhouseFileList"></div></div>
+      </div>
+      <div class="file-group required" id="wheelAssemblyFileGroup"><label>车轮/轮胎装配文件夹<span class="required-mark">*</span></label><div class="file-desc">选择包含车轮装配和关联零件的父级文件夹</div><input type="file" id="wheelAssemblyFile" webkitdirectory directory multiple><div class="file-selection-list" id="wheelAssemblyFileList"></div><label class="sub-file-label">根节点装配<span class="required-mark">*</span></label><select id="wheelAssemblyRootSelect" class="file-control"></select><div class="file-group-error">请选择车轮装配文件夹和根节点 CATProduct</div></div>
+      <div class="file-control-row">
+        <div class="file-group required" id="tireRadiusGroup"><label>轮胎半径值 r<span class="required-mark">*</span></label><div class="file-unit-field"><input class="file-control" type="number" id="tireRadiusInput" min="0" step="1"><span class="file-unit-label">mm</span></div><div class="file-group-error">请输入大于 0 的轮胎半径值 r</div></div>
+        <div class="file-group required" id="tireWidthGroup"><label>轮胎Y向宽度值 b<span class="required-mark">*</span></label><div class="file-unit-field"><input class="file-control" type="number" id="tireWidthInput" min="0" step="1"><span class="file-unit-label">mm</span></div><div class="file-group-error">请输入大于 0 的轮胎Y向宽度值 b</div></div>
+      </div>
+    </div>
+    <div style="padding: 16px 20px 20px; border-top: 1px solid rgba(15, 23, 42, 0.06); display: flex; gap: 12px;">
+      <button class="btn btn-primary" id="btnConfirmUpload" style="flex:1; justify-content:center;">确认上传</button>
+      <button class="btn btn-outline" id="btnCancelUpload" style="flex:1; justify-content:center;">取消</button>
+    </div>
+  </div>
+</div>
+
+<div class="log-modal" id="versionLibModal">
+  <div class="log-dialog" style="width: 820px;">
+    <div class="card-header"><span class="card-title">结果文件版本库</span></div>
+    <div id="versionListContainer" class="version-list">
+      <div class="empty-version">暂无缓存结果文件，请先完成检测并保存结果文件</div>
+    </div>
+    <div style="padding: 12px 20px; border-top:1px solid rgba(15, 23, 42, 0.06); text-align: right;">
+      <button class="btn btn-secondary btn-sm" id="closeVersionLibFooterBtn">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="log-modal" id="previewModal">
+  <div class="log-dialog" style="width: 900px; max-width: 95vw;">
+    <div class="card-header"><span class="card-title">结果文件预览</span><button class="btn btn-secondary btn-sm" id="closePreviewBtn">关闭</button></div>
+    <div id="previewContent" class="preview-content">加载中...</div>
+    <div style="padding: 12px 20px; border-top:1px solid rgba(15, 23, 42, 0.06); text-align: right;">
+      <button class="btn btn-secondary btn-sm" id="closePreviewFooterBtn">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="log-modal" id="settingsModal">
+  <div class="log-dialog" style="width: 640px;">
+    <div class="card-header"><span class="card-title">检测设置</span><button class="btn btn-secondary btn-sm" id="closeSettingsBtn">关闭</button></div>
+    <div style="padding: 20px; display: none; gap: 18px; max-height: 76vh; overflow-y: auto;">
+      <label class="setting-row" for="captureBeforeDetectionToggle">
+        <span>
+          <strong>检测前捕获 CATIA 画面</strong>
+          <small>关闭后，点击开始检测会直接运行程序，不再弹出窗口选择器。</small>
+        </span>
+        <input type="checkbox" id="captureBeforeDetectionToggle" checked>
+      </label>
+      <label class="setting-row" for="autoStopCaptureToggle">
+        <span>
+          <strong>检测结束后自动停止捕获</strong>
+          <small>关闭后，CATIA 画面会保留在左侧预览区，需要手动停止捕获。</small>
+        </span>
+        <input type="checkbox" id="autoStopCaptureToggle" checked>
+      </label>
+      <button class="btn btn-outline" id="manualStopCaptureBtn" type="button" style="justify-content:center;">
+        <span class="btn-icon"><span class="material-symbols-outlined">stop_screen_share</span></span>
+        <span class="btn-text"><span class="btn-label">停止当前捕获</span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB_NAME = "WheelhouseReportDB";
+const STORE_NAME = "reports";
+const API_BASE = window.location.origin;
+const AUTO_STOP_CAPTURE_KEY = "wheelhouse_auto_stop_capture";
+const CAPTURE_BEFORE_DETECTION_KEY = "wheelhouse_capture_before_detection";
+const ALGORITHM_SETTING_STORAGE_KEY = "wheelhouse_algorithm_feature_names";
+const DEFAULT_ALGORITHM_SETTINGS = {};
+
+// ================== 步骤定义（用于右侧对话框） ==================
+const STEPS = [
+  { id: "connect", label: "连接 CATIA" },
+  { id: "openFiles", label: "打开输入文件" },
+  { id: "scanWheel", label: "筛选轮胎候选" },
+  { id: "matchWheelhouse", label: "匹配轮罩和车轮" },
+  { id: "axisPlanes", label: "创建轴线和切割面" },
+  { id: "bbox", label: "获取轮罩包围盒" },
+  { id: "section", label: "截面导出与极值点线" },
+  { id: "distance", label: "法规距离测量" },
+  { id: "annotation", label: "法规标注" },
+  { id: "screenshot", label: "法规截图" },
+  { id: "saveResult", label: "保存校核结果" }
+];
+
+const STEP_SKIP_PATTERNS = {
+  "三项检测跳过": ["vehicleDirection", "parametricMirror", "hideFeatures"],
+  "间隙/FOV/厚度检查跳过": ["regulationLine", "reflectionPoints", "gapCheck"],
+  "二次校核跳过": ["secondaryCheck"]
+};
+
+let stepStatus = Object.fromEntries(STEPS.map(step => [step.id, "pending"]));
+
+// ================== 原有变量 ==================
+let db = null;
+let ws = null;
+let wsReconnectTimer = null;
+let isVerifying = false;
+let currentCaptureStream = null;
+let selectedFiles = {
+  leftFront: null,
+  rightFront: null,
+  leftRear: null,
+  rightRear: null,
+  wheel: [],
+  wheelRootPath: ""
+};
+let uploadedFileManifest = null;
+let pendingReportBlob = null;
+let pendingReportFilename = null;
+let pendingReportFiles = [];
+let chatMessages = [];
+let inputCheckLogs = [];
+let inputCheckMessageId = null;
+let inputCheckBatchSeq = 0;
+let autoStopCaptureAfterDetection = localStorage.getItem(AUTO_STOP_CAPTURE_KEY) !== "0";
+let captureBeforeDetection = localStorage.getItem(CAPTURE_BEFORE_DETECTION_KEY) !== "0";
+
+// ================== DOM 元素 ==================
+const btnUpload = document.getElementById("btnUploadBtn");
+const btnStart = document.getElementById("btnStart");
+const btnVersionLib = document.getElementById("btnVersionLib");
+const btnReset = document.getElementById("btnReset");
+const settingsButton = document.getElementById("settingsButton");
+const footerStatus = document.getElementById("footerStatus");
+const footerMeta = document.getElementById("footerMeta");
+const viewport = document.getElementById("viewport");
+const vpTitle = document.getElementById("vpTitle");
+const vpAngle = document.getElementById("vpAngle");
+const vpInfo = document.getElementById("vpInfo");
+const viewportLoading = document.getElementById("viewportLoading");
+const viewportLoadingText = document.getElementById("viewportLoadingText");
+const aiMessagesContainer = document.getElementById("aiMessagesContainer");
+const clearDialogBtn = document.getElementById("clearDialogBtn");
+const fileSelectModal = document.getElementById("fileSelectModal");
+const versionLibModal = document.getElementById("versionLibModal");
+const previewModal = document.getElementById("previewModal");
+const settingsModal = document.getElementById("settingsModal");
+const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+const captureBeforeDetectionToggle = document.getElementById("captureBeforeDetectionToggle");
+const autoStopCaptureToggle = document.getElementById("autoStopCaptureToggle");
+const manualStopCaptureBtn = document.getElementById("manualStopCaptureBtn");
+const algorithmSettingInputs = Array.from(document.querySelectorAll(".algorithm-setting-input"));
+const leftFrontWheelhouseFileInput = document.getElementById("leftFrontWheelhouseFile");
+const rightFrontWheelhouseFileInput = document.getElementById("rightFrontWheelhouseFile");
+const leftRearWheelhouseFileInput = document.getElementById("leftRearWheelhouseFile");
+const rightRearWheelhouseFileInput = document.getElementById("rightRearWheelhouseFile");
+const wheelAssemblyFileInput = document.getElementById("wheelAssemblyFile");
+const wheelAssemblyRootSelect = document.getElementById("wheelAssemblyRootSelect");
+const tireRadiusInput = document.getElementById("tireRadiusInput");
+const tireWidthInput = document.getElementById("tireWidthInput");
+const btnConfirmUpload = document.getElementById("btnConfirmUpload");
+const btnCancelUpload = document.getElementById("btnCancelUpload");
+const btnFileSelectClose = document.getElementById("btnFileSelectClose");
+
+const leftFrontWheelhouseFileList = document.getElementById("leftFrontWheelhouseFileList");
+const rightFrontWheelhouseFileList = document.getElementById("rightFrontWheelhouseFileList");
+const leftRearWheelhouseFileList = document.getElementById("leftRearWheelhouseFileList");
+const rightRearWheelhouseFileList = document.getElementById("rightRearWheelhouseFileList");
+const wheelAssemblyFileList = document.getElementById("wheelAssemblyFileList");
+
+const onboardingOverlay = document.getElementById("onboardingOverlay");
+const onboardingFlow = document.getElementById("onboardingFlow");
+const onboardingStepIndex = document.getElementById("onboardingStepIndex");
+const onboardingFocusIcon = document.getElementById("onboardingFocusIcon");
+const onboardingFocusTitle = document.getElementById("onboardingFocusTitle");
+const onboardingFocusDesc = document.getElementById("onboardingFocusDesc");
+const onboardingNextBtn = document.getElementById("onboardingNextBtn");
+const onboardingSkipBtn = document.getElementById("onboardingSkipBtn");
+
+const ONBOARDING_STORAGE_KEY = "wheelhouse-verification-onboarding-v2";
+let onboardingCurrentStep = 0;
+let onboardingActiveTarget = null;
+
+const onboardingSteps = [
+  {
+    title: "确认 CATIA 状态",
+    desc: "先确认 CATIA 已打开并可连接。",
+    focusTitle: "查看 CATIA 状态",
+    focusDesc: "进入工作台后先查看日志助手中的 CATIA 状态提示。如提示未打开，可按提示启动 CATIA，确保后续检测能正常连接。",
+    icon: "desktop_windows",
+    target: () => document.querySelector(".message-item.status-catia-status") || aiMessagesContainer
+  },
+  {
+    title: "上传输入文件",
+    desc: "选择轮罩零件和车轮/轮胎装配。",
+    focusTitle: "上传输入文件",
+    focusDesc: "点击「上传文件」按钮，在弹窗中选择三个必填文件。文件确认后，系统会切换到可开始校核状态。",
+    icon: "upload_file",
+    target: () => btnUpload
+  },
+  {
+    title: "开始检测并观察进度",
+    desc: "启动检测并关注日志进度。",
+    focusTitle: "执行检测流程",
+    focusDesc: "点击「开始检测」后选择 CATIA 窗口进行画面捕获。检测过程中可在日志助手中观察轮胎筛选、轮罩匹配、截面极值和距离测量进度。",
+    icon: "play_circle",
+    target: () => btnStart
+  },
+  {
+    title: "查看结果与版本库",
+    desc: "检查检测结果并管理历史文件。",
+    focusTitle: "打开版本库",
+    focusDesc: "检测完成后可保存结果文件和报告，并在「版本库」中预览、下载或删除历史结果文件。",
+    icon: "folder_managed",
+    target: () => btnVersionLib
+  }
+];
+
+// ================== 基础函数 ==================
+function escapeHTML(str) {
+  return String(str).replace(/[&<>]/g, m => m === "&" ? "&amp;" : (m === "<" ? "&lt;" : "&gt;"));
+}
+
+function includesAny(message, patterns) {
+  return patterns.some((pattern) => message.includes(pattern));
+}
+
+function normalizeZipPath(path) {
+  return String(path || "").replace(/\\/g, "/").replace(/^\/+/, "");
+}
+
+function readZipString(bytes, offset, length) {
+  return new TextDecoder("utf-8").decode(bytes.slice(offset, offset + length));
+}
+
+async function inflateRawZipData(data) {
+  if (!("DecompressionStream" in window)) {
+    throw new Error("当前浏览器不支持 DOCX 压缩内容解压，请下载后查看。");
+  }
+  const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+async function readDocxZipEntries(arrayBuffer) {
+  const bytes = new Uint8Array(arrayBuffer);
+  const view = new DataView(arrayBuffer);
+  let eocdOffset = -1;
+  for (let offset = bytes.length - 22; offset >= 0; offset--) {
+    if (view.getUint32(offset, true) === 0x06054b50) {
+      eocdOffset = offset;
+      break;
+    }
+  }
+  if (eocdOffset < 0) throw new Error("无法识别 DOCX 文件结构。");
+
+  const centralDirectorySize = view.getUint32(eocdOffset + 12, true);
+  const centralDirectoryOffset = view.getUint32(eocdOffset + 16, true);
+  const entries = new Map();
+  let cursor = centralDirectoryOffset;
+  const end = centralDirectoryOffset + centralDirectorySize;
+
+  while (cursor < end) {
+    if (view.getUint32(cursor, true) !== 0x02014b50) break;
+    const method = view.getUint16(cursor + 10, true);
+    const compressedSize = view.getUint32(cursor + 20, true);
+    const fileNameLength = view.getUint16(cursor + 28, true);
+    const extraLength = view.getUint16(cursor + 30, true);
+    const commentLength = view.getUint16(cursor + 32, true);
+    const localHeaderOffset = view.getUint32(cursor + 42, true);
+    const fileName = normalizeZipPath(readZipString(bytes, cursor + 46, fileNameLength));
+
+    const localNameLength = view.getUint16(localHeaderOffset + 26, true);
+    const localExtraLength = view.getUint16(localHeaderOffset + 28, true);
+    const dataOffset = localHeaderOffset + 30 + localNameLength + localExtraLength;
+    const compressedData = bytes.slice(dataOffset, dataOffset + compressedSize);
+    let data;
+    if (method === 0) data = compressedData;
+    else if (method === 8) data = await inflateRawZipData(compressedData);
+    else throw new Error(`DOCX 中存在暂不支持的压缩方式: ${method}`);
+    entries.set(fileName, data);
+    cursor += 46 + fileNameLength + extraLength + commentLength;
+  }
+  return entries;
+}
+
+function xmlChildrenByLocalName(node, localName) {
+  return Array.from(node.childNodes || []).filter(child => child.nodeType === 1 && child.localName === localName);
+}
+
+function xmlDescendantsByLocalName(node, localName) {
+  return Array.from(node.getElementsByTagName("*")).filter(child => child.localName === localName);
+}
+
+function paragraphText(paragraphNode) {
+  return xmlDescendantsByLocalName(paragraphNode, "t").map(node => node.textContent || "").join("");
+}
+
+function docxRelMap(entries) {
+  const relBytes = entries.get("word/_rels/document.xml.rels");
+  if (!relBytes) return new Map();
+  const xml = new TextDecoder("utf-8").decode(relBytes);
+  const doc = new DOMParser().parseFromString(xml, "application/xml");
+  const relationships = Array.from(doc.getElementsByTagName("*")).filter(node => node.localName === "Relationship");
+  const rels = new Map();
+  relationships.forEach(rel => {
+    const id = rel.getAttribute("Id");
+    const target = normalizeZipPath(rel.getAttribute("Target"));
+    if (id && target) rels.set(id, target.startsWith("word/") ? target : `word/${target}`);
+  });
+  return rels;
+}
+
+function imageMimeFromPath(path) {
+  const lower = path.toLowerCase();
+  if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+  if (lower.endsWith(".gif")) return "image/gif";
+  if (lower.endsWith(".bmp")) return "image/bmp";
+  if (lower.endsWith(".webp")) return "image/webp";
+  return "image/png";
+}
+
+function renderDocxParagraph(node, rels, entries, objectUrls) {
+  const text = paragraphText(node);
+  const blips = xmlDescendantsByLocalName(node, "blip");
+  let html = text ? `<p>${escapeHTML(text)}</p>` : "";
+  blips.forEach(blip => {
+    const embedId = blip.getAttribute("r:embed") || blip.getAttribute("embed");
+    const target = rels.get(embedId);
+    const imageBytes = target ? entries.get(target) : null;
+    if (!imageBytes) return;
+    const url = URL.createObjectURL(new Blob([imageBytes], { type: imageMimeFromPath(target) }));
+    objectUrls.push(url);
+    html += `<img src="${url}" alt="DOCX image">`;
+  });
+  return html || "<p><br></p>";
+}
+
+function renderDocxTable(tableNode) {
+  const rows = xmlChildrenByLocalName(tableNode, "tr");
+  const rowsHtml = rows.map(row => {
+    const cells = xmlChildrenByLocalName(row, "tc");
+    const cellsHtml = cells.map(cell => `<td>${escapeHTML(paragraphText(cell)) || "&nbsp;"}</td>`).join("");
+    return `<tr>${cellsHtml}</tr>`;
+  }).join("");
+  return `<table>${rowsHtml}</table>`;
+}
+
+async function renderDocxPreview(blob, previewContent, fileName) {
+  const entries = await readDocxZipEntries(await blob.arrayBuffer());
+  const documentBytes = entries.get("word/document.xml");
+  if (!documentBytes) throw new Error("DOCX 中未找到 word/document.xml。");
+  const rels = docxRelMap(entries);
+  const objectUrls = [];
+  previewContent._docxObjectUrls?.forEach(url => URL.revokeObjectURL(url));
+  previewContent._docxObjectUrls = objectUrls;
+
+  const xml = new TextDecoder("utf-8").decode(documentBytes);
+  const doc = new DOMParser().parseFromString(xml, "application/xml");
+  const body = Array.from(doc.getElementsByTagName("*")).find(node => node.localName === "body");
+  if (!body) throw new Error("DOCX 正文为空。");
+
+  const html = Array.from(body.childNodes).filter(node => node.nodeType === 1).map(node => {
+    if (node.localName === "p") return renderDocxParagraph(node, rels, entries, objectUrls);
+    if (node.localName === "tbl") return renderDocxTable(node);
+    return "";
+  }).join("");
+  previewContent.innerHTML = `<div class="docx-preview"><div style="font-weight:700;margin-bottom:12px;">${escapeHTML(fileName)}</div>${html || "<p>DOCX 无可预览内容。</p>"}</div>`;
+}
+
+function openIndexedDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      db = request.result;
+      resolve(db);
+    };
+    request.onupgradeneeded = (event) => {
+      const dbRef = event.target.result;
+      if (!dbRef.objectStoreNames.contains(STORE_NAME)) {
+        dbRef.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+      }
+    };
+  });
+}
+
+async function saveReportToDB(blob, fileName, timestamp) {
+  if (!db) await openIndexedDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    const record = { fileName, fileBlob: blob, size: blob.size, timestamp, readableTime: new Date(timestamp).toLocaleString() };
+    const request = store.add(record);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getAllReports() {
+  if (!db) await openIndexedDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], "readonly");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result || []);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function deleteReportById(id) {
+  if (!db) await openIndexedDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.delete(id);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function deleteReportsByIds(ids) {
+  const uniqueIds = Array.from(new Set(ids.map(Number))).filter(Number.isFinite);
+  if (!uniqueIds.length) return 0;
+  if (!db) await openIndexedDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    transaction.oncomplete = () => resolve(uniqueIds.length);
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error);
+    uniqueIds.forEach(id => store.delete(id));
+  });
+}
+
+async function clearAllReports() {
+  if (!db) await openIndexedDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.clear();
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function loadAlgorithmSettings() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(ALGORITHM_SETTING_STORAGE_KEY) || "{}");
+    return { ...DEFAULT_ALGORITHM_SETTINGS, ...(stored && typeof stored === "object" ? stored : {}) };
+  } catch {
+    return { ...DEFAULT_ALGORITHM_SETTINGS };
+  }
+}
+
+function getAlgorithmSettings() {
+  const settings = loadAlgorithmSettings();
+  algorithmSettingInputs.forEach(input => {
+    const key = input.dataset.settingKey;
+    if (key) settings[key] = input.value.trim() || DEFAULT_ALGORITHM_SETTINGS[key] || "";
+  });
+  return settings;
+}
+
+function saveAlgorithmSettings() {
+  const settings = getAlgorithmSettings();
+  localStorage.setItem(ALGORITHM_SETTING_STORAGE_KEY, JSON.stringify(settings));
+  return settings;
+}
+
+function renderAlgorithmSettings() {
+  const settings = loadAlgorithmSettings();
+  algorithmSettingInputs.forEach(input => {
+    const key = input.dataset.settingKey;
+    if (key) input.value = settings[key] || DEFAULT_ALGORITHM_SETTINGS[key] || "";
+  });
+}
+
+async function startScreenCapture() {
+  if (currentCaptureStream) stopScreenCapture();
+  try {
+    addChatMessage("system", "正在请求屏幕捕获，请在弹出的选择器中选择 CATIA V5 窗口", "info");
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+      video: { displaySurface: "window", cursor: "always" },
+      audio: false
+    });
+    currentCaptureStream = stream;
+    const vpLive = document.getElementById("vpLive");
+    vpLive.srcObject = stream;
+    await vpLive.play();
+    document.getElementById("viewport").classList.add("live");
+    document.getElementById("vpInfo").innerHTML = "状态: 实时采集中<br>CATIA 画面已连接";
+    document.getElementById("vpTitle").textContent = "CATIA V5 / Live Capture";
+    updateSettingsUI();
+    addChatMessage("system", "CATIA 窗口画面已捕获", "success");
+    stream.getVideoTracks()[0].addEventListener("ended", () => stopScreenCapture());
+    return true;
+  } catch (err) {
+    addChatMessage("system", `捕获画面失败: ${err.message}`, "error");
+    return false;
+  }
+}
+
+function stopScreenCapture() {
+  if (currentCaptureStream) {
+    currentCaptureStream.getTracks().forEach(track => track.stop());
+    currentCaptureStream = null;
+    const vpLive = document.getElementById("vpLive");
+    vpLive.srcObject = null;
+    document.getElementById("viewport").classList.remove("live");
+    const vpInfo = document.getElementById("vpInfo");
+    vpInfo.innerHTML = "状态: 待机<br>等待上传零件文件";
+    document.getElementById("vpTitle").textContent = "车轮罩法规校核";
+    addChatMessage("system", "CATIA 画面捕获已停止", "info");
+  }
+  updateSettingsUI();
+}
+
+function updateSettingsUI() {
+  if (captureBeforeDetectionToggle) {
+    captureBeforeDetectionToggle.checked = captureBeforeDetection;
+  }
+  if (autoStopCaptureToggle) {
+    autoStopCaptureToggle.checked = autoStopCaptureAfterDetection;
+  }
+  if (manualStopCaptureBtn) {
+    manualStopCaptureBtn.disabled = !currentCaptureStream;
+  }
+}
+
+function handleCaptureAfterDetection() {
+  if (autoStopCaptureAfterDetection) {
+    stopScreenCapture();
+    return;
+  }
+  updateSettingsUI();
+  if (currentCaptureStream) {
+    addChatMessage("system", "已根据设置保留 CATIA 捕获画面，可在设置中手动停止捕获", "info");
+  }
+}
+
+function setUploadFieldError(group, hasError) {
+  if (!group) return;
+  group.classList.toggle("error", hasError);
+}
+
+function resetUploadFieldErrors() {
+  setUploadFieldError(document.getElementById("leftFrontWheelhouseFileGroup"), false);
+  setUploadFieldError(document.getElementById("rightFrontWheelhouseFileGroup"), false);
+  setUploadFieldError(document.getElementById("leftRearWheelhouseFileGroup"), false);
+  setUploadFieldError(document.getElementById("rightRearWheelhouseFileGroup"), false);
+  setUploadFieldError(document.getElementById("wheelAssemblyFileGroup"), false);
+  setUploadFieldError(document.getElementById("tireRadiusGroup"), false);
+  setUploadFieldError(document.getElementById("tireWidthGroup"), false);
+}
+
+function isCatPartFile(file) {
+  return !!file && /\.catpart$/i.test(file.name || "");
+}
+
+function isCatProductOrPartFile(file) {
+  return !!file && /\.(catproduct|catpart)$/i.test(file.name || "");
+}
+
+function isCatProductPath(path) {
+  return /\.catproduct$/i.test(path || "");
+}
+
+function isPositiveNumberInput(input) {
+  const value = Number(input && input.value);
+  return Number.isFinite(value) && value > 0;
+}
+
+function validateRequiredUploadFiles() {
+  let isValid = true;
+  const leftFrontGroup = document.getElementById("leftFrontWheelhouseFileGroup");
+  const rightFrontGroup = document.getElementById("rightFrontWheelhouseFileGroup");
+  const leftRearGroup = document.getElementById("leftRearWheelhouseFileGroup");
+  const rightRearGroup = document.getElementById("rightRearWheelhouseFileGroup");
+  const wheelGroup = document.getElementById("wheelAssemblyFileGroup");
+  const radiusGroup = document.getElementById("tireRadiusGroup");
+  const widthGroup = document.getElementById("tireWidthGroup");
+  const wheelhouseFiles = [
+    { key: "leftFront", group: leftFrontGroup },
+    { key: "rightFront", group: rightFrontGroup },
+    { key: "leftRear", group: leftRearGroup },
+    { key: "rightRear", group: rightRearGroup }
+  ];
+  let hasWheelhouse = false;
+  wheelhouseFiles.forEach(({ key, group }) => {
+    const file = selectedFiles[key];
+    const valid = file && isCatPartFile(file);
+    if (valid) hasWheelhouse = true;
+    setUploadFieldError(group, !file ? false : !valid);
+    if (file && !valid) isValid = false;
+  });
+  if (!hasWheelhouse) {
+    wheelhouseFiles.forEach(({ group }) => setUploadFieldError(group, true));
+    isValid = false;
+  }
+  if (!selectedFiles.wheel.length || !isCatProductPath(selectedFiles.wheelRootPath)) {
+    setUploadFieldError(wheelGroup, true);
+    isValid = false;
+  } else {
+    setUploadFieldError(wheelGroup, false);
+  }
+  if (!isPositiveNumberInput(tireRadiusInput)) {
+    setUploadFieldError(radiusGroup, true);
+    isValid = false;
+  } else {
+    setUploadFieldError(radiusGroup, false);
+  }
+  if (!isPositiveNumberInput(tireWidthInput)) {
+    setUploadFieldError(widthGroup, true);
+    isValid = false;
+  } else {
+    setUploadFieldError(widthGroup, false);
+  }
+  return isValid;
+}
+
+function setViewportLoading(visible, text = "正在执行检测...") {
+  viewport.classList.toggle("loading", visible);
+  viewportLoadingText.textContent = text;
+}
+
+function addChatMessage(role, text, level = "info") {
+  const now = new Date();
+  const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+  chatMessages.push({ role, text, timestamp: timeStr, level: role === "system" ? level : null });
+  if (chatMessages.length > 600) chatMessages.shift();
+  renderAIDialog();
+}
+
+function addChatMessageWithActions(role, text, level, actions) {
+  const now = new Date();
+  const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+  const id = `msg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  chatMessages.push({ id, role, text, timestamp: timeStr, level: role === "system" ? level : null, actions });
+  if (chatMessages.length > 600) chatMessages.shift();
+  renderAIDialog();
+  return id;
+}
+
+function upsertChatMessageWithActions(key, text, level, actions = []) {
+  const now = new Date();
+  const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+  const existingIndex = chatMessages.findIndex(msg => msg.statusKey === key);
+  const payload = {
+    id: key,
+    role: "system",
+    text,
+    timestamp: timeStr,
+    level,
+    actions,
+    statusKey: key
+  };
+  if (existingIndex >= 0) {
+    chatMessages[existingIndex] = { ...chatMessages[existingIndex], ...payload };
+  } else {
+    chatMessages.push(payload);
+    if (chatMessages.length > 600) chatMessages.shift();
+  }
+  renderAIDialog();
+}
+
+function updateMessageActions(messageId, actions = []) {
+  const target = chatMessages.find(msg => msg.id === messageId);
+  if (!target) return;
+  target.actions = actions;
+  renderAIDialog();
+}
+
+function upsertStatusMessage(key, text, level = "info", loading = false) {
+  const now = new Date();
+  const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+  const existingIndex = chatMessages.findIndex(msg => msg.statusKey === key);
+  const payload = { role: "system", text, timestamp: timeStr, level, loading, statusKey: key };
+  if (existingIndex >= 0) {
+    chatMessages[existingIndex] = { ...chatMessages[existingIndex], ...payload };
+  } else {
+    chatMessages.push(payload);
+    if (chatMessages.length > 600) chatMessages.shift();
+  }
+  renderAIDialog();
+}
+
+function upsertInlineLogMessage(id, text, level = "info") {
+  const now = new Date();
+  const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+  const existingIndex = chatMessages.findIndex(msg => msg.id === id);
+  const payload = { id, role: "system", text, timestamp: timeStr, level };
+  if (existingIndex >= 0) {
+    chatMessages.splice(existingIndex, 1);
+  }
+  chatMessages.push(payload);
+  if (chatMessages.length > 600) chatMessages.shift();
+  renderAIDialog();
+}
+
+function renderAIDialog() {
+  if (chatMessages.length === 0) {
+    aiMessagesContainer.innerHTML = `<div class="empty-message-placeholder">等待检测流程启动<br>系统日志会在这里实时展开</div>`;
+  } else {
+    aiMessagesContainer.innerHTML = chatMessages.map(msg => {
+      const msgClass = msg.role === "system" ? "system" : "user";
+      const statusClass = msg.statusKey ? ` status-${escapeHTML(msg.statusKey)}` : "";
+      let dotHtml = "";
+      if (msg.role === "system" && msg.level) {
+        let dotColor = "dot-info";
+        if (msg.level === "success") dotColor = "dot-success";
+        else if (msg.level === "error") dotColor = "dot-error";
+        else if (msg.level === "warn") dotColor = "dot-warn";
+        else if (msg.level === "system") dotColor = "dot-system";
+        dotHtml = `<span class="message-dot ${dotColor}"></span>`;
+      }
+      const actionsHtml = Array.isArray(msg.actions) && msg.actions.length
+        ? `<div class="message-actions">${msg.actions.map(action => `
+            <button class="message-action-btn${action.kind === "primary" ? " primary" : ""}" data-action-id="${escapeHTML(action.id)}" data-message-id="${escapeHTML(msg.id || "")}">
+              ${escapeHTML(action.label)}
+            </button>
+          `).join("")}</div>`
+        : "";
+      return `
+        <div class="message-item ${msgClass}${statusClass}">
+          <div class="message-bubble">${escapeHTML(msg.text)}${actionsHtml}</div>
+          <div class="message-meta">${dotHtml}${msg.timestamp || ""}</div>
+        </div>
+      `;
+    }).join("");
+    aiMessagesContainer.querySelectorAll(".message-action-btn").forEach(btn => {
+      btn.addEventListener("click", handleMessageActionClick);
+    });
+    aiMessagesContainer.scrollTop = aiMessagesContainer.scrollHeight;
+  }
+}
+
+function clearDialog() {
+  chatMessages = [];
+  renderAIDialog();
+  addChatMessage("system", "对话记录已清空", "system");
+}
+
+function handleInputCheckLog(line) {
+  const match = String(line || "").match(/^\[输入检查\]\[(success|error|warn|info)\]\s*(.+)$/);
+  if (!match) return false;
+  const item = match[2];
+  if (item.includes("正在进行输入项检查") || !inputCheckMessageId) {
+    inputCheckLogs = [];
+    inputCheckMessageId = `input-check-result-${Date.now()}-${++inputCheckBatchSeq}`;
+  }
+  inputCheckLogs.push(item);
+  const level = inputCheckLogs.some(item => item.includes("未找到") || item.includes("失败")) ? "error" : "success";
+  upsertInlineLogMessage(inputCheckMessageId, `输入特征检查结果\n${inputCheckLogs.join("\n")}`, level);
+  return true;
+}
+
+function formatAngleValue(value) {
+  if (value === null || value === undefined || value === "") return "-";
+  const num = Number(value);
+  if (!Number.isFinite(num)) return String(value);
+  return `${num.toFixed(1).replace(/\.0$/, "")}°`;
+}
+
+function formatMirrorOffset(horizontalAngle, verticalAngle) {
+  if (horizontalAngle === null || horizontalAngle === undefined || verticalAngle === null || verticalAngle === undefined) {
+    return "未找到满足条件的偏转角度";
+  }
+  const horizontal = Number(horizontalAngle);
+  const vertical = Number(verticalAngle);
+  const parts = [];
+  if (Number.isFinite(horizontal) && Math.abs(horizontal) > 1e-9) {
+    parts.push(`${horizontal > 0 ? "向右" : "向左"}偏转${formatAngleValue(Math.abs(horizontal))}`);
+  }
+  if (Number.isFinite(vertical) && Math.abs(vertical) > 1e-9) {
+    parts.push(`${vertical > 0 ? "向下" : "向上"}偏转${formatAngleValue(Math.abs(vertical))}`);
+  }
+  return parts.length ? parts.join("，") : "不偏转";
+}
+
+function addWheelhouseDistanceSummary(result) {
+  const axisPart = result?.regulation_axis_part || {};
+  const measurements = {
+    ...(axisPart.bbox_measurements || {})
+  };
+  (axisPart.section_curve_results || []).forEach(item => {
+    Object.assign(measurements, item.regulation_distance_measurements || {});
+  });
+  const keys = [
+    "Left-Front-q", "Right-Front-q", "Left-Rear-q", "Right-Rear-q",
+    "Left-Front-c", "Right-Front-c", "Left-Rear-c", "Right-Rear-c",
+    "Left-Front-p", "Left-Front-p30", "Right-Front-p", "Right-Front-p30",
+    "Left-Rear-p", "Left-Rear-p30", "Right-Rear-p", "Right-Rear-p30"
+  ];
+  const lines = ["车轮罩法规距离测量"];
+  const formatDistance = value => {
+    const number = Number(value);
+    return Number.isFinite(number) ? number.toFixed(2) : value;
+  };
+  keys.forEach(key => {
+    if (measurements[key] !== undefined && measurements[key] !== null) {
+      lines.push(`${key}: ${formatDistance(measurements[key])} mm`);
+    }
+  });
+  const complianceRows = result?.regulation_report?.compliance_results || [];
+  if (complianceRows.length) {
+    lines.push("");
+    lines.push("法规对比结果");
+    complianceRows.forEach(row => {
+      lines.push(`${row.item}: ${formatDistance(row.value)} mm ${row.requirement} -> ${row.result}`);
+    });
+  }
+  if (lines.length > 1) addChatMessage("system", lines.join("\n"), result?.success === false ? "error" : "success");
+}
+
+async function refreshCatiaStatus() {
+  try {
+    const response = await fetch(`${API_BASE}/api/catia-status`, { cache: "no-store" });
+    if (!response.ok) throw new Error(await response.text() || `HTTP ${response.status}`);
+    const status = await response.json();
+    if (status.running) {
+      upsertChatMessageWithActions("catia-status", "CATIA 状态: 已打开", "success", []);
+    } else {
+      upsertChatMessageWithActions("catia-status", "CATIA 状态: 未打开", "warn", [
+        { id: "open-catia", label: "打开 CATIA", kind: "primary" },
+        { id: "refresh-catia-status", label: "重新检测", kind: "secondary" }
+      ]);
+    }
+  } catch (err) {
+    upsertChatMessageWithActions("catia-status", `CATIA 状态检测失败: ${err.message}`, "error", [
+      { id: "refresh-catia-status", label: "重新检测", kind: "secondary" }
+    ]);
+  }
+}
+
+async function openCatiaFromDialog(messageId) {
+  updateMessageActions(messageId, []);
+  upsertChatMessageWithActions("catia-status", "正在打开 CATIA，请稍候...", "info", []);
+  try {
+    const response = await fetch(`${API_BASE}/api/open-catia`, { method: "POST" });
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      throw new Error(data?.detail || await response.text() || `HTTP ${response.status}`);
+    }
+    const result = await response.json();
+    upsertChatMessageWithActions("catia-status", result.message || "CATIA 已打开或已连接", "success", []);
+  } catch (err) {
+    upsertChatMessageWithActions("catia-status", `CATIA 打开失败: ${err.message}`, "error", [
+      { id: "open-catia", label: "再次打开", kind: "primary" },
+      { id: "refresh-catia-status", label: "重新检测", kind: "secondary" }
+    ]);
+  }
+}
+
+// ================== 步骤进度更新（仅用于右侧对话框） ==================
+function updateStepFromLog(line) {
+  const match = line.match(/\[(\d+)\]/);
+  if (!match) return;
+  const stepNum = parseInt(match[1], 10);
+  if (stepNum < 1 || stepNum > STEPS.length) return;
+  const isFailed = /失败|failed|异常|error|partial_failed/i.test(line);
+  const isCompleted = !isFailed && /完成|成功|已完成|status=success/i.test(line);
+  const stepIds = STEPS.map(s => s.id);
+  const currentStepId = stepIds[stepNum - 1];
+  if (isFailed) {
+    updateStep(currentStepId, "error");
+    if (stepNum > 1) {
+      const prevStepId = stepIds[stepNum - 2];
+      if (stepStatus[prevStepId] !== "success") updateStep(prevStepId, "success");
+    }
+    return;
+  }
+  if (isCompleted) {
+    updateStep(currentStepId, "success");
+    for (let index = 0; index < stepNum - 1; index += 1) {
+      const prevStepId = stepIds[index];
+      if (stepStatus[prevStepId] !== "success" && stepStatus[prevStepId] !== "skipped") {
+        updateStep(prevStepId, "success");
+      }
+    }
+    return;
+  }
+  updateStep(currentStepId, "running");
+  if (stepNum > 1) {
+    const prevStepId = stepIds[stepNum - 2];
+    if (stepStatus[prevStepId] !== "success") updateStep(prevStepId, "success");
+  }
+}
+
+function updateStep(id, status) {
+  if (stepStatus[id] === "success" && status === "running") return;
+  if (stepStatus[id] === "skipped" && status === "running") return;
+  if (stepStatus[id] === status) return;
+  stepStatus[id] = status;
+  renderStepProgress();
+}
+
+function markStepRunningByNumber(stepNum) {
+  if (stepNum < 1 || stepNum > STEPS.length) return;
+  const stepIds = STEPS.map(s => s.id);
+  const currentStepId = stepIds[stepNum - 1];
+  updateStep(currentStepId, "running");
+  for (let index = 0; index < stepNum - 1; index += 1) {
+    const prevStepId = stepIds[index];
+    if (stepStatus[prevStepId] !== "skipped") {
+      updateStep(prevStepId, "success");
+    }
+  }
+  if (stepNum === STEPS.length) {
+    setTimeout(() => {
+      stepIds.forEach(id => {
+        if (stepStatus[id] !== "skipped") updateStep(id, "success");
+      });
+    }, 500);
+  }
+}
+
+function markStepSuccessByNumber(stepNum) {
+  if (stepNum < 1 || stepNum > STEPS.length) return;
+  const stepIds = STEPS.map(s => s.id);
+  const currentStepId = stepIds[stepNum - 1];
+  updateStep(currentStepId, "success");
+  for (let index = 0; index < stepNum - 1; index += 1) {
+    const prevStepId = stepIds[index];
+    if (stepStatus[prevStepId] !== "skipped") {
+      updateStep(prevStepId, "success");
+    }
+  }
+}
+
+function markStepErrorByNumber(stepNum) {
+  if (stepNum < 1 || stepNum > STEPS.length) return;
+  const stepIds = STEPS.map(s => s.id);
+  const currentStepId = stepIds[stepNum - 1];
+  updateStep(currentStepId, "error");
+  for (let index = 0; index < stepNum - 1; index += 1) {
+    const prevStepId = stepIds[index];
+    if (stepStatus[prevStepId] !== "skipped" && stepStatus[prevStepId] !== "pending") {
+      updateStep(prevStepId, "success");
+    }
+  }
+}
+
+function markStepsSkipped(patternKey) {
+  const ids = STEP_SKIP_PATTERNS[patternKey];
+  if (!ids) return;
+  ids.forEach(id => {
+    if (stepStatus[id] !== "success" && stepStatus[id] !== "running") {
+      stepStatus[id] = "skipped";
+    }
+  });
+  renderStepProgress();
+}
+
+function renderStepProgress() {
+  let text = "";
+  STEPS.forEach((step, idx) => {
+    const status = stepStatus[step.id];
+    let icon = "○", statusText = "待执行";
+    if (status === "running") { icon = "◔"; statusText = "执行中"; }
+    else if (status === "success") { icon = "●"; statusText = "已完成"; }
+    else if (status === "error") { icon = "✕"; statusText = "异常"; }
+    else if (status === "skipped") { icon = "⊘"; statusText = "已跳过"; }
+    text += `${icon} 第${idx+1}步 ${step.label} · ${statusText}\n`;
+  });
+  upsertInlineLogMessage("workflow-steps", text, "info");
+}
+
+// ================== WebSocket 连接（只更新步骤进度，不显示其他日志） ==================
+function connectWebSocket() {
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
+  ws = new WebSocket(`ws://${new URL(API_BASE).host}/ws`);
+
+  ws.onopen = () => {
+    console.log("WebSocket 已连接");
+    upsertStatusMessage("ws-reconnect", "后端日志服务已连接", "success", false);
+  };
+
+  ws.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      if (data.type === "log") {
+        const msg = data.data.message;
+        handleInputCheckLog(msg);
+        updateStepFromLog(msg);
+
+      // ---- 优先识别跳过标记 ----
+        for (const key of Object.keys(STEP_SKIP_PATTERNS)) {
+          if (msg.includes(key)) {
+            markStepsSkipped(key);
+            break; // 一条日志只可能触发一个跳过组
+          }
+        }
+
+        // ---- 按步骤编号更新执行中/已完成 ----
+        let stepNum = 0;
+        if (msg.includes("法规校核报告") || msg.includes("结果 JSON") || msg.includes("总成文件") || msg.includes("车轮罩法规校核完成") || msg.includes("校核完成")) stepNum = 11;
+        else if (msg.includes("法规截图") || msg.includes("截图完成")) stepNum = 10;
+        else if (msg.includes("法规标注") || msg.includes("标注Product重开刷新") || msg.includes("标注创建") || msg.includes("创建标注")) stepNum = 9;
+        else if (msg.includes("法规校核距离测量") || msg.includes("距离测量") || msg.includes("Front-") || msg.includes("Rear-")) stepNum = 8;
+        else if (includesAny(msg, ["法规校核截面", "截面曲线", "截面导出", "截面结果极值点", "极值点线", "SectionResult", "far_plane_minimum_distance"])) stepNum = 7;
+        else if (includesAny(msg, ["包围盒", "可见主体"])) stepNum = 6;
+        else if (msg.includes("法规校核轴线") || msg.includes("轴线") || msg.includes("切割面")) stepNum = 5;
+        else if (msg.includes("车轮罩与Tire匹配")) stepNum = 4;
+        else if (includesAny(msg, ["Tire代表件", "车轮候选", "轮胎候选", "轮罩重心", "近距离", "400mm"])) stepNum = 3;
+        else if (includesAny(msg, ["开始车轮罩法规校核", "left_front:", "right_front:", "left_rear:", "right_rear:", "左前轮罩", "右前轮罩", "左后轮罩", "右后轮罩", "车轮装配根节点", "运行输出目录", "结果输出目录", "过程输出目录"])) stepNum = 2;
+        else if (msg.includes("连接 CATIA") || msg.includes("CATIA 已打开")) stepNum = 1;
+
+        if (stepNum >= 1 && stepNum <= STEPS.length) {
+          markStepRunningByNumber(stepNum);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  ws.onclose = () => {
+    upsertStatusMessage("ws-reconnect", "后端日志服务断开，正在重连...", "error", true);
+    if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
+    wsReconnectTimer = setTimeout(() => connectWebSocket(), 3000);
+  };
+
+  ws.onerror = (err) => {
+    console.error("WebSocket 错误", err);
+  };
+}
+
+// ================== 原有功能函数 ==================
+async function savePendingReport() {
+  const files = pendingReportFiles.length
+    ? pendingReportFiles
+    : (pendingReportBlob && pendingReportFilename ? [{ blob: pendingReportBlob, filename: pendingReportFilename }] : []);
+  if (!files.length) return;
+  const timestamp = Date.now();
+  for (const file of files) {
+    await saveReportToDB(file.blob, file.filename, timestamp);
+  }
+  addChatMessage("system", `结果文件已保存到版本库：${files.map(file => file.filename).join("、")}`, "success");
+  pendingReportBlob = null;
+  pendingReportFilename = null;
+  pendingReportFiles = [];
+  await renderVersionLib();
+}
+
+async function renderVersionLib() {
+  const container = document.getElementById("versionListContainer");
+  try {
+    const reports = await getAllReports();
+    if (!reports.length) {
+      container.innerHTML = '<div class="empty-version">暂无已保存结果文件，请先完成检测并保存</div>';
+      return;
+    }
+    reports.sort((a, b) => b.id - a.id);
+    const itemsHTML = reports.map((report, idx) => {
+      const versionNum = idx + 1;
+      const sizeKB = (report.size / 1024).toFixed(2);
+      return `
+        <div class="version-item" data-id="${report.id}">
+          <label class="version-select" title="选择此版本">
+            <input type="checkbox" class="version-select-checkbox" data-id="${report.id}">
+          </label>
+          <div class="version-info">
+            <strong>版本 ${versionNum}</strong><br>
+            ${escapeHTML(report.fileName)}<br>
+            ${escapeHTML(report.readableTime)} | ${sizeKB} KB
+          </div>
+          <div class="version-actions">
+            <button class="btn btn-secondary btn-sm preview-version-btn" data-id="${report.id}" data-filename="${escapeHTML(report.fileName)}">预览</button>
+            <button class="btn btn-secondary btn-sm download-version-btn" data-id="${report.id}" data-filename="${escapeHTML(report.fileName)}">下载</button>
+            <button class="btn btn-secondary btn-sm delete-version-btn" data-id="${report.id}">删除</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+    container.innerHTML = `
+      <div class="version-toolbar">
+        <label class="version-select-all">
+          <input type="checkbox" id="versionSelectAll">
+          <span>全选</span>
+        </label>
+        <span class="version-selected-count" id="versionSelectedCount">已选择 0 项</span>
+        <div class="version-toolbar-actions">
+          <button class="btn btn-secondary btn-sm" id="deleteSelectedVersionsBtn" disabled>删除选中</button>
+          <button class="btn btn-secondary btn-sm" id="clearAllVersionsBtn">清空全部</button>
+        </div>
+      </div>
+      ${itemsHTML}
+    `;
+
+    const selectAllCheckbox = container.querySelector("#versionSelectAll");
+    const selectedCount = container.querySelector("#versionSelectedCount");
+    const deleteSelectedBtn = container.querySelector("#deleteSelectedVersionsBtn");
+    const clearAllBtn = container.querySelector("#clearAllVersionsBtn");
+    const checkboxes = Array.from(container.querySelectorAll(".version-select-checkbox"));
+
+    const updateSelectionState = () => {
+      const selected = checkboxes.filter(input => input.checked);
+      selectedCount.textContent = `已选择 ${selected.length} 项`;
+      deleteSelectedBtn.disabled = selected.length === 0;
+      selectAllCheckbox.checked = selected.length > 0 && selected.length === checkboxes.length;
+      selectAllCheckbox.indeterminate = selected.length > 0 && selected.length < checkboxes.length;
+    };
+
+    selectAllCheckbox.addEventListener("change", () => {
+      checkboxes.forEach(input => {
+        input.checked = selectAllCheckbox.checked;
+      });
+      updateSelectionState();
+    });
+
+    checkboxes.forEach(input => {
+      input.addEventListener("change", updateSelectionState);
+    });
+
+    deleteSelectedBtn.addEventListener("click", async () => {
+      const selectedIds = checkboxes.filter(input => input.checked).map(input => Number(input.dataset.id));
+      if (!selectedIds.length) return;
+      if (confirm(`确定删除选中的 ${selectedIds.length} 个结果文件版本吗？`)) {
+        const deletedCount = await deleteReportsByIds(selectedIds);
+        addChatMessage("system", `已删除 ${deletedCount} 个结果文件版本`, "system");
+        await renderVersionLib();
+      }
+    });
+
+    clearAllBtn.addEventListener("click", async () => {
+      if (confirm(`确定清空全部 ${reports.length} 个结果文件版本吗？此操作不可撤销。`)) {
+        await clearAllReports();
+        addChatMessage("system", "版本库已清空", "system");
+        await renderVersionLib();
+      }
+    });
+
+    container.querySelectorAll(".preview-version-btn").forEach(btn => {
+      btn.addEventListener("click", async (event) => {
+        const id = Number(btn.dataset.id);
+        const reportsAll = await getAllReports();
+        const target = reportsAll.find(r => r.id === id);
+        if (target && target.fileBlob) {
+          const previewContent = document.getElementById("previewContent");
+          previewContent.innerHTML = "正在解析结果文件...";
+          previewModal.classList.add("open");
+          if (target.fileBlob.type.includes("text/html") || target.fileName.endsWith(".html")) {
+            previewContent.innerHTML = await target.fileBlob.text();
+          } else if (target.fileBlob.type.includes("application/vnd.openxmlformats-officedocument.wordprocessingml.document") || target.fileName.endsWith(".docx")) {
+            try {
+              await renderDocxPreview(target.fileBlob, previewContent, target.fileName);
+            } catch (docxErr) {
+              previewContent.innerHTML = `<div style="padding:20px;text-align:center;">Word 预览失败: ${escapeHTML(docxErr.message)}<br><br><button class="btn btn-primary" id="fallbackDownloadBtn">下载此报告文件</button></div>`;
+              document.getElementById("fallbackDownloadBtn")?.addEventListener("click", () => downloadBlob(target.fileBlob, target.fileName));
+            }
+          } else if (target.fileBlob.type.includes("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") || target.fileName.endsWith(".xlsx") || target.fileName.endsWith(".xls")) {
+            try {
+              const arrayBuffer = await target.fileBlob.arrayBuffer();
+              const workbook = XLSX.read(arrayBuffer, { type: "array" });
+              const sheetNames = workbook.SheetNames;
+              if (!sheetNames.length) throw new Error("工作簿中没有工作表");
+
+              // 渲染 sheet 切换 tabs + 第一个 sheet 的表格
+              let tabsHTML = '<div class="preview-sheet-tabs">';
+              sheetNames.forEach((name, i) => {
+                tabsHTML += `<button class="preview-sheet-tab${i === 0 ? ' active' : ''}" data-sheet="${i}">${escapeHTML(name)}</button>`;
+              });
+              tabsHTML += '</div>';
+
+              // 把所有 sheet 转成 HTML 表格，先隐藏非第一个
+              let sheetsHTML = '';
+              sheetNames.forEach((name, i) => {
+                const ws = workbook.Sheets[name];
+                const html = XLSX.utils.sheet_to_html(ws, { id: `preview-sheet-${i}`, editable: false });
+                sheetsHTML += `<div class="preview-sheet-pane" data-sheet-idx="${i}" style="${i !== 0 ? 'display:none;' : ''}">${html}</div>`;
+              });
+
+              previewContent.innerHTML = tabsHTML + sheetsHTML;
+
+              // sheet tab 切换事件
+              previewContent.querySelectorAll(".preview-sheet-tab").forEach(tab => {
+                tab.addEventListener("click", () => {
+                  const idx = tab.dataset.sheet;
+                  previewContent.querySelectorAll(".preview-sheet-tab").forEach(t => t.classList.remove("active"));
+                  tab.classList.add("active");
+                  previewContent.querySelectorAll(".preview-sheet-pane").forEach(p => {
+                    p.style.display = p.dataset.sheetIdx === idx ? "" : "none";
+                  });
+                });
+              });
+            } catch (xlsErr) {
+              previewContent.innerHTML = `<div style="padding:20px;text-align:center;">Excel 解析失败: ${escapeHTML(xlsErr.message)}<br><br><button class="btn btn-primary" id="fallbackDownloadBtn">下载此结果文件</button></div>`;
+              document.getElementById("fallbackDownloadBtn")?.addEventListener("click", () => downloadBlob(target.fileBlob, target.fileName));
+            }
+          } else {
+            previewContent.innerHTML = `<div style="padding:20px;">无法预览此类型文件，请下载后查看。</div>`;
+          }
+        } else {
+          addChatMessage("system", "无法获取结果文件文件", "error");
+        }
+      });
+    });
+
+    container.querySelectorAll(".download-version-btn").forEach(btn => {
+      btn.addEventListener("click", async (event) => {
+        const id = Number(btn.dataset.id);
+        const filename = btn.dataset.filename;
+        const reportsAll = await getAllReports();
+        const target = reportsAll.find(r => r.id === id);
+        if (target && target.fileBlob) {
+          downloadBlob(target.fileBlob, filename);
+          addChatMessage("system", `结果文件“${filename}”已下载`, "success");
+        }
+      });
+    });
+
+    container.querySelectorAll(".delete-version-btn").forEach(btn => {
+      btn.addEventListener("click", async (event) => {
+        const id = Number(btn.dataset.id);
+        if (confirm("确定删除此结果文件版本吗？")) {
+          await deleteReportById(id);
+          addChatMessage("system", `结果文件 ID:${id} 已删除`, "system");
+          await renderVersionLib();
+        }
+      });
+    });
+  } catch (err) {
+    container.innerHTML = '<div class="empty-version">加载版本库失败</div>';
+  }
+}
+
+async function handleMessageActionClick(event) {
+  const actionId = event.currentTarget.dataset.actionId;
+  const messageId = event.currentTarget.dataset.messageId;
+  if (actionId === "save-pending-report") {
+    updateMessageActions(messageId, []);
+    await savePendingReport();
+  } else if (actionId === "discard-pending-report") {
+    updateMessageActions(messageId, []);
+    pendingReportBlob = null;
+    pendingReportFilename = null;
+    pendingReportFiles = [];
+    addChatMessage("system", "结果文件已丢弃，未保存", "system");
+  } else if (actionId === "open-version-lib") {
+    await renderVersionLib();
+    versionLibModal.classList.add("open");
+    updateMessageActions(messageId, []);
+  } else if (actionId === "open-catia") {
+    await openCatiaFromDialog(messageId);
+  } else if (actionId === "refresh-catia-status") {
+    updateMessageActions(messageId, []);
+    await refreshCatiaStatus();
+  } else if (actionId === "close") {
+    updateMessageActions(messageId, []);
+  }
+}
+
+async function startVerification() {
+  if (isVerifying) return;
+  if (!selectedFiles.leftFront && !selectedFiles.rightFront && !selectedFiles.leftRear && !selectedFiles.rightRear) {
+    addChatMessage("system", "请先上传至少一个轮罩零件", "warn");
+    return;
+  }
+  if (!selectedFiles.wheel.length || !selectedFiles.wheelRootPath) {
+    addChatMessage("system", "请先上传车轮装配文件夹，并选择根节点装配", "warn");
+    return;
+  }
+  if (captureBeforeDetection) {
+    addChatMessage("system", "准备连接 CATIA 画面，请在弹出窗口中选择 CATIA 窗口", "info");
+    const captured = await startScreenCapture();
+    if (!captured) {
+      addChatMessage("system", "未选择 CATIA 窗口，检测已取消", "warn");
+      return;
+    }
+  } else {
+    addChatMessage("system", "已根据设置跳过 CATIA 画面捕获，直接开始检测", "info");
+  }
+  isVerifying = true;
+  btnStart.disabled = true;
+  setViewportLoading(false);
+  vpAngle.textContent = "检测中";
+  footerStatus.textContent = "检测中";
+  addChatMessage("system", "开始执行车轮罩法规校核，请稍候...", "info");
+  // 重置步骤状态
+  Object.keys(stepStatus).forEach(id => stepStatus[id] = "pending");
+  renderStepProgress();
+
+  const formData = new FormData();
+  if (selectedFiles.leftFront) formData.append("left_front_wheelhouse_file", selectedFiles.leftFront);
+  if (selectedFiles.rightFront) formData.append("right_front_wheelhouse_file", selectedFiles.rightFront);
+  if (selectedFiles.leftRear) formData.append("left_rear_wheelhouse_file", selectedFiles.leftRear);
+  if (selectedFiles.rightRear) formData.append("right_rear_wheelhouse_file", selectedFiles.rightRear);
+  formData.append("wheel_assembly_root_path", selectedFiles.wheelRootPath);
+  formData.append("tire_radius_r", tireRadiusInput.value);
+  formData.append("tire_width_y_b", tireWidthInput.value);
+  selectedFiles.wheel.forEach(file => {
+    const relPath = file.webkitRelativePath || file.name;
+    formData.append("wheel_assembly_files", file, relPath);
+  });
+
+  try {
+    const response = await fetch(`${API_BASE}/verify`, { method: "POST", body: formData });
+    if (!response.ok) throw new Error(await response.text() || `HTTP ${response.status}`);
+    const verifyResult = await response.json();
+    const resultResponse = await fetch(`${API_BASE}${verifyResult.result_download_url || "/api/download-result"}`, { cache: "no-store" });
+    if (!resultResponse.ok) throw new Error(await resultResponse.text() || "总成 CATProduct 下载失败");
+    const docxReportResponse = verifyResult.docx_report_download_url
+      ? await fetch(`${API_BASE}${verifyResult.docx_report_download_url}`, { cache: "no-store" })
+      : null;
+    if (!docxReportResponse || !docxReportResponse.ok) throw new Error("法规校核报告下载失败");
+    const resultBlob = await resultResponse.blob();
+    const docxReportBlob = await docxReportResponse.blob();
+    pendingReportFiles = [
+      {
+        blob: resultBlob,
+        filename: verifyResult.result_filename || `wheelhouse_result_${Date.now()}.CATProduct`
+      },
+      {
+        blob: docxReportBlob,
+        filename: verifyResult.docx_report_filename || `wheelhouse_regulation_report_${Date.now()}.docx`
+      }
+    ];
+    pendingReportBlob = resultBlob;
+    pendingReportFilename = pendingReportFiles[0].filename;
+    vpAngle.textContent = "完成";
+    footerStatus.textContent = "检测完成";
+    vpInfo.innerHTML = "状态: 校核完成<br>总成结果文件与法规校核报告已生成";
+    try {
+      const finalResultResponse = await fetch(`${API_BASE}/api/result`, { cache: "no-store" });
+      if (finalResultResponse.ok) {
+        addWheelhouseDistanceSummary(await finalResultResponse.json());
+      }
+    } catch {
+      // 距离摘要是辅助信息，文件下载结果为准。
+    }
+    addChatMessageWithActions("system", "车轮罩法规校核已完成，是否保存本次结果文件？", "success", [
+      { id: "save-pending-report", label: "保存", kind: "primary" },
+      { id: "discard-pending-report", label: "暂不保存", kind: "secondary" }
+    ]);
+    handleCaptureAfterDetection();
+  } catch (err) {
+    let detail = err.message || "未知错误";
+    try {
+      const healthResponse = await fetch(`${API_BASE}/health`, { cache: "no-store" });
+      if (healthResponse.ok) {
+        const statusResponse = await fetch(`${API_BASE}/api/status`, { cache: "no-store" });
+        if (statusResponse.ok) {
+          const status = await statusResponse.json();
+          if (status.last_error) {
+            detail = status.last_error;
+          } else if (detail === "Failed to fetch") {
+            detail = "检测请求已断开，但后端服务仍可访问，请查看后端终端日志获取 CATIA 失败原因";
+          }
+        }
+      } else if (detail === "Failed to fetch") {
+        detail = "后端服务无响应，请确认 server.py 仍在运行";
+      }
+    } catch {
+      if (detail === "Failed to fetch") {
+        detail = "后端服务连接已断开，请重新启动后端服务后再运行";
+      }
+    }
+    addChatMessage("system", `检测失败: ${detail}`, "error");
+    vpAngle.textContent = "失败";
+    footerStatus.textContent = "检测失败";
+    handleCaptureAfterDetection();
+  } finally {
+    setViewportLoading(false);
+    isVerifying = false;
+    btnStart.disabled = false;
+  }
+}
+
+function resetSteps() {
+  Object.keys(stepStatus).forEach(id => stepStatus[id] = "pending");
+  renderStepProgress();
+}
+
+// ================== 文件选择与上传 ==================
+function createFileSelectionItem(fileName, onRemove) {
+  const item = document.createElement("div");
+  item.className = "file-selection-item";
+  const name = document.createElement("span");
+  name.className = "file-selection-name";
+  name.textContent = fileName;
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.className = "file-remove-btn";
+  removeBtn.innerHTML = '<span class="material-symbols-outlined">close</span>';
+  removeBtn.onclick = onRemove;
+  item.appendChild(name);
+  item.appendChild(removeBtn);
+  return item;
+}
+
+function renderSingleFileSelection(input, listEl, group, key) {
+  listEl.innerHTML = "";
+  const file = input.files && input.files[0];
+  if (!file) {
+    selectedFiles[key] = null;
+    if (group) setUploadFieldError(group, false);
+    return;
+  }
+  const valid = key === "wheel" ? isCatProductOrPartFile(file) : isCatPartFile(file);
+  if (!valid) {
+    input.value = "";
+    selectedFiles[key] = null;
+    if (group) setUploadFieldError(group, true);
+    addChatMessage("system", key === "wheel" ? "文件类型不正确，请上传 .CATProduct 或 .CATPart 文件" : "文件类型不正确，请上传 .CATPart 文件", "error");
+    return;
+  }
+  selectedFiles[key] = file;
+  if (group) setUploadFieldError(group, false);
+  listEl.appendChild(createFileSelectionItem(file.name, () => {
+    input.value = "";
+    listEl.innerHTML = "";
+    selectedFiles[key] = null;
+    if (group) setUploadFieldError(group, false);
+  }));
+}
+
+function renderWheelAssemblyFolderSelection() {
+  const group = document.getElementById("wheelAssemblyFileGroup");
+  wheelAssemblyFileList.innerHTML = "";
+  wheelAssemblyRootSelect.innerHTML = "";
+  selectedFiles.wheel = [];
+  selectedFiles.wheelRootPath = "";
+
+  const files = Array.from(wheelAssemblyFileInput.files || []);
+  if (!files.length) {
+    setUploadFieldError(group, true);
+    return;
+  }
+
+  const catProducts = files
+    .map(file => ({ file, path: file.webkitRelativePath || file.name }))
+    .filter(item => isCatProductPath(item.path))
+    .sort((a, b) => a.path.localeCompare(b.path, "zh-Hans-CN"));
+
+  if (!catProducts.length) {
+    wheelAssemblyFileInput.value = "";
+    setUploadFieldError(group, true);
+    addChatMessage("system", "所选文件夹中未找到 .CATProduct 根节点装配文件", "error");
+    return;
+  }
+
+  selectedFiles.wheel = files;
+  catProducts.forEach((item, index) => {
+    const option = document.createElement("option");
+    option.value = item.path;
+    option.textContent = item.path;
+    wheelAssemblyRootSelect.appendChild(option);
+    if (index === 0) {
+      option.selected = true;
+      selectedFiles.wheelRootPath = item.path;
+    }
+  });
+  wheelAssemblyRootSelect.onchange = () => {
+    selectedFiles.wheelRootPath = wheelAssemblyRootSelect.value;
+    setUploadFieldError(group, !selectedFiles.wheelRootPath);
+  };
+
+  setUploadFieldError(group, false);
+  const folderName = (files[0].webkitRelativePath || "").split("/")[0] || "已选择文件夹";
+  wheelAssemblyFileList.appendChild(createFileSelectionItem(`${folderName} (${files.length} 个文件，${catProducts.length} 个 CATProduct)`, () => {
+    wheelAssemblyFileInput.value = "";
+    wheelAssemblyFileList.innerHTML = "";
+    wheelAssemblyRootSelect.innerHTML = "";
+    selectedFiles.wheel = [];
+    selectedFiles.wheelRootPath = "";
+    setUploadFieldError(group, true);
+  }));
+}
+
+leftFrontWheelhouseFileInput.addEventListener("change", () => renderSingleFileSelection(leftFrontWheelhouseFileInput, leftFrontWheelhouseFileList, document.getElementById("leftFrontWheelhouseFileGroup"), "leftFront"));
+rightFrontWheelhouseFileInput.addEventListener("change", () => renderSingleFileSelection(rightFrontWheelhouseFileInput, rightFrontWheelhouseFileList, document.getElementById("rightFrontWheelhouseFileGroup"), "rightFront"));
+leftRearWheelhouseFileInput.addEventListener("change", () => renderSingleFileSelection(leftRearWheelhouseFileInput, leftRearWheelhouseFileList, document.getElementById("leftRearWheelhouseFileGroup"), "leftRear"));
+rightRearWheelhouseFileInput.addEventListener("change", () => renderSingleFileSelection(rightRearWheelhouseFileInput, rightRearWheelhouseFileList, document.getElementById("rightRearWheelhouseFileGroup"), "rightRear"));
+wheelAssemblyFileInput.addEventListener("change", renderWheelAssemblyFolderSelection);
+
+btnConfirmUpload.onclick = async () => {
+  if (!validateRequiredUploadFiles()) {
+    addChatMessage("system", "请至少上传一个轮罩、车轮/轮胎装配文件夹，选择根节点 CATProduct，并输入 r、b", "error");
+    return;
+  }
+  fileSelectModal.classList.remove("open");
+  btnStart.hidden = false;
+  btnStart.disabled = false;
+  btnUpload.querySelector(".btn-label").textContent = "重新上传";
+
+  uploadedFileManifest = {
+    leftFront: selectedFiles.leftFront ? selectedFiles.leftFront.name : "未提供",
+    rightFront: selectedFiles.rightFront ? selectedFiles.rightFront.name : "未提供",
+    leftRear: selectedFiles.leftRear ? selectedFiles.leftRear.name : "未提供",
+    rightRear: selectedFiles.rightRear ? selectedFiles.rightRear.name : "未提供",
+    wheel: selectedFiles.wheelRootPath || "未提供",
+    tire_radius_r: tireRadiusInput.value,
+    tire_width_y_b: tireWidthInput.value
+  };
+
+  vpTitle.textContent = "CATIA V5 / 文件已就绪";
+  const loadedWheelhouses = [
+    selectedFiles.leftFront && `左前轮罩: ${selectedFiles.leftFront.name}`,
+    selectedFiles.rightFront && `右前轮罩: ${selectedFiles.rightFront.name}`,
+    selectedFiles.leftRear && `左后轮罩: ${selectedFiles.leftRear.name}`,
+    selectedFiles.rightRear && `右后轮罩: ${selectedFiles.rightRear.name}`
+  ].filter(Boolean).join("<br>");
+  const infoText = `状态: 文件已加载<br>${loadedWheelhouses}<br>车轮装配根节点: ${selectedFiles.wheelRootPath}<br>r: ${tireRadiusInput.value} mm，b: ${tireWidthInput.value} mm`;
+  addChatMessage("system", `文件已准备就绪：${loadedWheelhouses.replaceAll("<br>", "，")}，车轮装配根节点 ${selectedFiles.wheelRootPath}，r=${tireRadiusInput.value}，b=${tireWidthInput.value}`, "success");
+  vpInfo.innerHTML = infoText;
+  footerStatus.textContent = "就绪";
+  footerMeta.textContent = "已上传文件，可开始检测";
+  resetUploadFieldErrors();
+};
+
+btnCancelUpload.onclick = () => {
+  fileSelectModal.classList.remove("open");
+  resetUploadFieldErrors();
+};
+btnFileSelectClose.onclick = () => {
+  fileSelectModal.classList.remove("open");
+  resetUploadFieldErrors();
+};
+btnUpload.onclick = () => {
+  resetUploadFieldErrors();
+  fileSelectModal.classList.add("open");
+};
+
+settingsButton.onclick = () => {
+  updateSettingsUI();
+  settingsModal.classList.add("open");
+};
+closeSettingsBtn.onclick = () => settingsModal.classList.remove("open");
+algorithmSettingInputs.forEach(input => {
+  input.addEventListener("change", saveAlgorithmSettings);
+  input.addEventListener("blur", saveAlgorithmSettings);
+});
+captureBeforeDetectionToggle.onchange = () => {
+  captureBeforeDetection = captureBeforeDetectionToggle.checked;
+  localStorage.setItem(CAPTURE_BEFORE_DETECTION_KEY, captureBeforeDetection ? "1" : "0");
+  addChatMessage(
+    "system",
+    captureBeforeDetection
+      ? "已开启检测前 CATIA 画面捕获"
+      : "已关闭检测前 CATIA 画面捕获，开始检测时将直接运行程序",
+    "info"
+  );
+};
+autoStopCaptureToggle.onchange = () => {
+  autoStopCaptureAfterDetection = autoStopCaptureToggle.checked;
+  localStorage.setItem(AUTO_STOP_CAPTURE_KEY, autoStopCaptureAfterDetection ? "1" : "0");
+  addChatMessage(
+    "system",
+    autoStopCaptureAfterDetection
+      ? "已开启：检测结束后自动停止 CATIA 捕获"
+      : "已关闭：检测结束后保留 CATIA 捕获画面",
+    "system"
+  );
+};
+manualStopCaptureBtn.onclick = () => {
+  if (!currentCaptureStream) {
+    addChatMessage("system", "当前没有正在捕获的 CATIA 画面", "warn");
+    updateSettingsUI();
+    return;
+  }
+  stopScreenCapture();
+};
+
+// ================== 其他按钮事件 ==================
+btnStart.onclick = startVerification;
+btnReset.onclick = async () => {
+  if (isVerifying) {
+    addChatMessage("system", "请等待检测完成后再重置", "warn");
+    return;
+  }
+  try {
+    await fetch(`${API_BASE}/api/reset`, { method: "POST" });
+  } catch (err) {
+    addChatMessage("system", `后端状态重置失败: ${err.message}`, "warn");
+  }
+  stopScreenCapture();
+  selectedFiles = { leftFront: null, rightFront: null, leftRear: null, rightRear: null, wheel: [], wheelRootPath: "" };
+  leftFrontWheelhouseFileInput.value = "";
+  rightFrontWheelhouseFileInput.value = "";
+  leftRearWheelhouseFileInput.value = "";
+  rightRearWheelhouseFileInput.value = "";
+  wheelAssemblyFileInput.value = "";
+  tireRadiusInput.value = "";
+  tireWidthInput.value = "";
+  leftFrontWheelhouseFileList.innerHTML = "";
+  rightFrontWheelhouseFileList.innerHTML = "";
+  leftRearWheelhouseFileList.innerHTML = "";
+  rightRearWheelhouseFileList.innerHTML = "";
+  wheelAssemblyFileList.innerHTML = "";
+  wheelAssemblyRootSelect.innerHTML = "";
+  btnStart.hidden = true;
+  btnStart.disabled = true;
+  btnUpload.querySelector(".btn-label").textContent = "上传文件";
+  uploadedFileManifest = null;
+  pendingReportBlob = null;
+  pendingReportFilename = null;
+  pendingReportFiles = [];
+  vpTitle.textContent = "车轮罩法规校核";
+  vpAngle.textContent = "待机";
+  vpInfo.innerHTML = "状态: 待机<br>等待上传零件文件";
+  footerStatus.textContent = "已重置";
+  footerMeta.textContent = "等待任务启动";
+  addChatMessage("system", "已重置状态，请重新上传轮罩零件和车轮装配文件夹", "system");
+  resetSteps();
+};
+btnVersionLib.onclick = async () => {
+  await renderVersionLib();
+  versionLibModal.classList.add("open");
+};
+clearDialogBtn.onclick = clearDialog;
+document.getElementById("closeVersionLibFooterBtn").onclick = () => versionLibModal.classList.remove("open");
+document.getElementById("closePreviewBtn").onclick = () => previewModal.classList.remove("open");
+document.getElementById("closePreviewFooterBtn").onclick = () => previewModal.classList.remove("open");
+
+// ================== 新手引导 ==================
+function clearOnboardingTarget() {
+  if (onboardingActiveTarget) {
+    onboardingActiveTarget.classList.remove("guide-target-active");
+    onboardingActiveTarget = null;
+  }
+}
+function setOnboardingTarget(target) {
+  clearOnboardingTarget();
+  if (!target) return;
+  onboardingActiveTarget = target;
+  onboardingActiveTarget.classList.add("guide-target-active");
+}
+function positionOnboardingCard() {
+  if (!onboardingOverlay.classList.contains("open")) return;
+  const step = onboardingSteps[onboardingCurrentStep];
+  const target = typeof step?.target === "function" ? step.target() : null;
+  const card = onboardingOverlay.querySelector(".onboarding-card");
+  if (!card) return;
+  const margin = 16;
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const cardWidth = Math.min(480, viewportWidth - 24);
+  card.style.width = `${cardWidth}px`;
+  if (!target) {
+    card.style.left = `${Math.max(12, viewportWidth - cardWidth - 16)}px`;
+    card.style.top = `${Math.max(80, Math.min(120, viewportHeight - card.offsetHeight - 16))}px`;
+    return;
+  }
+  const rect = target.getBoundingClientRect();
+  let top = rect.bottom + margin;
+  let left = rect.left;
+  if (top + (card.offsetHeight || 260) > viewportHeight - 12) top = rect.top - (card.offsetHeight || 260) - margin;
+  if (left + cardWidth > viewportWidth - 12) left = rect.right - cardWidth;
+  if (left < 12) left = 12;
+  if (top < 76) top = 76;
+  card.style.left = `${Math.round(left)}px`;
+  card.style.top = `${Math.round(top)}px`;
+}
+function persistOnboardingSeen() { try { localStorage.setItem(ONBOARDING_STORAGE_KEY, "1"); } catch(_) {} }
+function hasSeenOnboarding() { return false; }
+function closeOnboarding(markSeen = true) {
+  onboardingOverlay.classList.remove("open");
+  onboardingOverlay.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("onboarding-open");
+  clearOnboardingTarget();
+  if (markSeen) persistOnboardingSeen();
+}
+function renderOnboarding() {
+  const step = onboardingSteps[onboardingCurrentStep];
+  onboardingStepIndex.textContent = `${String(onboardingCurrentStep + 1).padStart(2, "0")} / ${String(onboardingSteps.length).padStart(2, "0")}`;
+  onboardingFocusIcon.textContent = step.icon;
+  onboardingFocusTitle.textContent = step.focusTitle;
+  onboardingFocusDesc.textContent = step.focusDesc;
+  onboardingFlow.innerHTML = onboardingSteps.map((item, index) => `
+    <div class="onboarding-flow-item${index === onboardingCurrentStep ? " active" : ""}">
+      <div class="onboarding-flow-step">STEP ${String(index + 1).padStart(2, "0")}</div>
+      <div class="onboarding-flow-title">${escapeHTML(item.title)}</div>
+    </div>
+  `).join("");
+  setOnboardingTarget(typeof step.target === "function" ? step.target() : null);
+  requestAnimationFrame(positionOnboardingCard);
+}
+function openOnboarding() {
+  onboardingCurrentStep = 0;
+  onboardingOverlay.classList.add("open");
+  onboardingOverlay.setAttribute("aria-hidden", "false");
+  document.body.classList.add("onboarding-open");
+  renderOnboarding();
+}
+function maybeShowOnboarding() {
+  if (hasSeenOnboarding()) return;
+  setTimeout(() => openOnboarding(), 180);
+}
+onboardingSkipBtn.onclick = () => closeOnboarding(true);
+onboardingNextBtn.onclick = () => {
+  if (onboardingCurrentStep >= onboardingSteps.length - 1) {
+    closeOnboarding(true);
+    return;
+  }
+  onboardingCurrentStep++;
+  renderOnboarding();
+};
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && onboardingOverlay.classList.contains("open")) closeOnboarding(true);
+});
+window.addEventListener("resize", () => positionOnboardingCard());
+window.addEventListener("scroll", () => positionOnboardingCard(), true);
+
+// ================== 初始化 ==================
+async function init() {
+  await openIndexedDB();
+  btnStart.hidden = true;
+  btnStart.disabled = true;
+  renderAlgorithmSettings();
+  updateSettingsUI();
+  renderAIDialog();
+  connectWebSocket();
+  await refreshCatiaStatus();
+  maybeShowOnboarding();
+  renderStepProgress();
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>后视镜法规校核 - 智能体架构图</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#f1f5f9; font-family:'PingFang SC','Microsoft YaHei',sans-serif; padding:40px 20px; display:flex; flex-direction:column; align-items:center; }
+    .header,.container,.legend { max-width:1400px; width:100%; background:#fff; border-radius:16px; padding:30px 40px; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+    .header { margin-bottom:24px; }
+    .header h1 { font-size:26px; font-weight:700; color:#0f172a; margin-bottom:6px; }
+    .header .sub { font-size:15px; color:#64748b; display:flex; gap:24px; flex-wrap:wrap; }
+    .tag { display:inline-block; padding:2px 10px; border-radius:20px; font-size:13px; font-weight:500; }
+    .tag-green { background:#dcfce7; color:#166534; }
+    .container { padding:40px; overflow-x:auto; margin-bottom:24px; }
+    #diagram { display:flex; justify-content:center; min-width:1000px; }
+    #diagram svg { max-width:100%; height:auto; }
+    .legend { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; }
+    .legend-item { display:flex; align-items:center; gap:10px; font-size:14px; color:#334155; }
+    .legend-color { width:20px; height:20px; border-radius:4px; flex-shrink:0; }
+    .btn-bar { max-width:1400px; width:100%; margin:16px 0 24px; display:flex; gap:12px; flex-wrap:wrap; }
+    .btn-bar button { padding:10px 24px; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; }
+    .btn-primary { background:#3b82f6; color:#fff; }
+    .btn-primary:hover { background:#2563eb; }
+    .btn-secondary { background:#f1f5f9; color:#334155; }
+    .btn-secondary:hover { background:#e2e8f0; }
+    .footer { max-width:1400px; width:100%; text-align:center; font-size:13px; color:#94a3b8; }
+    @media (max-width:768px) { body { padding:16px; } .header,.container,.legend { padding:16px; } }
+  </style>
+</head>
+<body>
+<div class="header">
+  <h1>🧠 后视镜法规校核 - 智能体架构图</h1>
+  <div class="sub">
+    <span>📅 2026-07-28</span>
+    <span>📌 v1.0</span>
+    <span><span class="tag tag-green">✅ 7+1 标准架构</span></span>
+    <span>🔧 本地 Web + FastAPI + WebSocket + Python Worker + CATIA V5 COM</span>
+  </div>
+</div>
+<div class="container"><div id="diagram"></div></div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-color" style="background:#4A90D9"></div><span>L7 应用与交互层</span></div>
+  <div class="legend-item"><div class="legend-color" style="background:#2EA8B8"></div><span>L6 编排与路由层</span></div>
+  <div class="legend-item"><div class="legend-color" style="background:#8B5CF6"></div><span>L5 智能体层</span></div>
+  <div class="legend-item"><div class="legend-color" style="background:#EC4899"></div><span>L4 技能层</span></div>
+  <div class="legend-item"><div class="legend-color" style="background:#F59E0B"></div><span>L3 模型层</span></div>
+  <div class="legend-item"><div class="legend-color" style="background:#EF4444"></div><span>L2 工具与协议层</span></div>
+  <div class="legend-item"><div class="legend-color" style="background:#78716C"></div><span>L1 数据与记忆层</span></div>
+  <div class="legend-item"><div class="legend-color" style="background:#94A3B8;border:2px dashed #64748b"></div><span>⚡ 横切关注层</span></div>
+  <div class="legend-item"><div class="legend-color" style="background:#D97706;border:2px dashed #b45309"></div><span>外部依赖</span></div>
+</div>
+<div class="btn-bar">
+  <button class="btn-primary" onclick="downloadSVG()">⬇ 下载 SVG</button>
+  <button class="btn-secondary" onclick="downloadPNG()">⬇ 下载 PNG</button>
+  <button class="btn-secondary" onclick="window.print()">🖨 导出 PDF</button>
+</div>
+<div class="footer">后视镜法规校核 - 7+1 分层智能体架构 | 技术栈: 本地 Web + FastAPI + WebSocket + Python Worker + CATIA V5 COM</div>
+<script>
+  mermaid.initialize({
+    startOnLoad:false, theme:'base',
+    themeVariables:{ background:'#FFFFFF', primaryColor:'#F8FAFC', primaryTextColor:'#1E293B', primaryBorderColor:'#CBD5E1', lineColor:'#94A3B8', secondaryColor:'#E2E8F0', tertiaryColor:'#F1F5F9', fontSize:'14px', fontFamily:'PingFang SC,Microsoft YaHei,sans-serif' },
+    flowchart:{ useMaxWidth:true, htmlLabels:true, curve:'basis', padding:10 },
+    securityLevel:'loose'
+  });
+  const diag = `graph BT
+
+  classDef appNode fill:#DBEAFE,stroke:#4A90D9,stroke-width:1.5px,color:#1E3A5F
+  classDef orcNode fill:#CCFBF1,stroke:#2EA8B8,stroke-width:1.5px,color:#134E4A
+  classDef ageNode fill:#EDE9FE,stroke:#8B5CF6,stroke-width:1.5px,color:#4C1D95
+  classDef sklNode fill:#FCE7F3,stroke:#EC4899,stroke-width:1.5px,color:#831843
+  classDef modNode fill:#FEF3C7,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  classDef tooNode fill:#FEE2E2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  classDef datNode fill:#F1F5F9,stroke:#78716C,stroke-width:1.5px,color:#44403C
+  classDef cross fill:#F8FAFC,stroke:#94A3B8,stroke-width:2px,stroke-dasharray:6 3,color:#475569
+  classDef external fill:#FFFBEB,stroke:#D97706,stroke-width:1.5px,stroke-dasharray:4 2,color:#92400E
+
+  subgraph Cross["⚡ 横切关注层 Cross-cutting"]
+    direction TB
+    CR0["🔍 实时日志\n流程状态推送"]:::cross
+    CR1["🔒 输入防护\n文件与特征校验"]:::cross
+    CR2["💬 异常处理\n运行锁与错误"]:::cross
+  end
+
+  subgraph L7["L7: 应用与交互层 Application"]
+    direction LR
+    L7_0["🖥️ 本地工作台\n上传与查看"]:::appNode
+    L7_1["🖥️ 浏览器\nChrome/Edge"]:::external
+  end
+
+  subgraph L6["L6: 编排与路由层 Orchestration"]
+    direction LR
+    L6_0["🚪 FastAPI服务\n接口与静态页"]:::orcNode
+    L6_1["📤 WebSocket\n实时日志"]:::orcNode
+    L6_2["🎯 Worker进程\n隔离CATIA"]:::orcNode
+  end
+
+
+  subgraph L4["L4: 技能层 Skill"]
+    direction LR
+    L4_0["🎯 输入检查\n校验特征名"]:::sklNode
+    L4_1["🎯 法规线构造\n生成法规点线"]:::sklNode
+    L4_2["🎯 镜片搜索\n角度组合搜索"]:::sklNode
+    L4_3["🎯 反射取点\n生成反射点"]:::sklNode
+    L4_4["🎯 间隙校核\n边界距离判定"]:::sklNode
+    L4_5["🎯 截图报告\n截图与docx"]:::sklNode
+  end
+
+
+  subgraph L2["L2: 工具与协议层 Tool & Protocol"]
+    direction LR
+    L2_0["🔌 文件IO\n读写本地文件"]:::tooNode
+    L2_1["🔗 CATIA V5\n几何建模环境"]:::external
+    L2_2["🔌 WindowsCOM\n驱动CATIA"]:::tooNode
+    L2_3["🌐 屏幕捕获\n预览CATIA"]:::tooNode
+  end
+
+  subgraph L1["L1: 数据与记忆层 Data & Memory"]
+    direction LR
+    L1_0["💾 session文件\n后端会话"]:::datNode
+    L1_1["🗄️ IndexedDB\n前端版本库"]:::datNode
+    L1_2["📦 上传目录\nCATPart输入"]:::datNode
+    L1_3["📚 输出文件\n结果与报告"]:::datNode
+  end
+
+  CR0 -.->|贯穿| CR1
+  CR1 -.->|贯穿| CR2
+
+  L7_0 -->|HTTP/gRPC| L6_0
+  L7_1 -->|HTTP/gRPC| L6_0
+  L2_0 -->|CRUD/检索| L1_0
+  L2_0 -->|CRUD/检索| L1_1
+  L2_0 -->|CRUD/检索| L1_2
+  L2_0 -->|CRUD/检索| L1_3
+  L6_0 -->|日志推送| L6_1
+  L6_0 -->|启动检测| L6_2
+  L6_2 -->|执行流程| L4_0
+  L4_0 -->|通过后| L4_1
+  L4_1 -->|构造后| L4_2
+  L4_2 -->|最优角度| L4_3
+  L4_3 -->|测量点| L4_4
+  L4_4 -->|校核结果| L4_5
+  L4_1 -->|COM自动化| L2_2
+  L2_2 -->|控制| L2_1
+  L4_5 -->|写结果| L2_0
+  L7_0 -->|版本库| L1_1
+`;
+  async function render() {
+    try {
+      const {svg} = await mermaid.render('mermaid-diagram', diag);
+      document.getElementById('diagram').innerHTML = svg;
+    } catch(e) {
+      document.getElementById('diagram').innerHTML = '<p style="color:#ef4444;padding:40px;text-align:center;">❌ 渲染失败: '+e.message+'</p>';
+      console.error(e);
+    }
+  }
+  render();
+  function getSVG() { return document.querySelector('#diagram svg'); }
+  function downloadSVG() {
+    const s=getSVG(); if(!s) return;
+    const c=s.cloneNode(true); c.setAttribute('xmlns','http://www.w3.org/2000/svg');
+    const b=new Blob(['<?xml version="1.0" encoding="UTF-8"?>',c.outerHTML],{type:'image/svg+xml'});
+    dl(b,'后视镜法规校核-arch.svg');
+  }
+  function downloadPNG() {
+    const s=getSVG(); if(!s) return;
+    const c=s.cloneNode(true); c.setAttribute('xmlns','http://www.w3.org/2000/svg');
+    const str=new XMLSerializer().serializeToString(c);
+    const ca=document.createElement('canvas');
+    const r=s.getBoundingClientRect();
+    ca.width=r.width*2; ca.height=r.height*2;
+    const ctx=ca.getContext('2d'); ctx.scale(2,2);
+    const img=new Image();
+    const b=new Blob(['<?xml version="1.0" encoding="UTF-8"?>',str],{type:'image/svg+xml'});
+    const u=URL.createObjectURL(b);
+    img.onload=function(){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,ca.width,ca.height); ctx.drawImage(img,0,0); URL.revokeObjectURL(u); ca.toBlob(function(p){dl(p,'后视镜法规校核-arch.png');}); };
+    img.src=u;
+  }
+  function dl(blob,name) { const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(u); }
+</script>
+</body>
+</html>

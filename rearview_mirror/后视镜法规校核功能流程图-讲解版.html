@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>后视镜法规校核功能流程图（讲解版）</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px 20px;
+      background: #eef2f7;
+      color: #0f172a;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+    .page { max-width: 1500px; margin: 0 auto; }
+    header, .diagram-wrap, .note {
+      background: #ffffff;
+      border: 1px solid #dbe3ef;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+    header { padding: 22px 26px; margin-bottom: 18px; }
+    h1 { margin: 0 0 8px; font-size: 26px; line-height: 1.3; }
+    .meta { display: flex; gap: 14px; flex-wrap: wrap; color: #475569; font-size: 14px; }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 18px; }
+    button {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button.primary { background: #2563eb; border-color: #2563eb; color: #ffffff; }
+    .diagram-wrap { padding: 28px; overflow: auto; }
+    #diagram { min-width: 1120px; display: flex; justify-content: center; }
+    #diagram svg { max-width: 100%; height: auto; }
+    .note { margin-top: 18px; padding: 18px 22px; color: #334155; line-height: 1.75; font-size: 14px; }
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      header, .toolbar, .note { display: none; }
+      .diagram-wrap { border: none; box-shadow: none; padding: 0; }
+      #diagram { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>后视镜法规校核功能流程图（讲解版）</h1>
+      <div class="meta">
+        <span>主线: 输入准备 → 服务调度 → 自动建模 → 偏转搜索 → 正式校核 → 结果交付</span>
+        <span>适用: 汇报讲解 / 评审演示</span>
+      </div>
+    </header>
+    <div class="toolbar">
+      <button class="primary" onclick="downloadSVG()">下载 SVG</button>
+      <button onclick="downloadPNG()">下载 PNG</button>
+      <button onclick="window.print()">导出 PDF</button>
+    </div>
+    <main class="diagram-wrap"><div id="diagram"></div></main>
+    <section class="note">
+      讲解建议：先讲用户输入和 CATIA 可用性，再讲 Worker 隔离执行，重点落在法规线构造和镜片偏转搜索，最后收束到 3mm 间隙判定与报告交付。
+    </section>
+  </div>
+  <script>
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "base",
+      themeVariables: {
+        background: "#ffffff",
+        primaryColor: "#f8fafc",
+        primaryTextColor: "#0f172a",
+        primaryBorderColor: "#cbd5e1",
+        lineColor: "#64748b",
+        fontFamily: "Microsoft YaHei, PingFang SC, Arial, sans-serif",
+        fontSize: "14px"
+      },
+      flowchart: { useMaxWidth: true, htmlLabels: true, curve: "basis", padding: 12 },
+      securityLevel: "loose"
+    });
+    const diagram = String.raw`flowchart LR
+  Start([开始])
+  End([完成])
+  A["1 输入准备<br/>上传后视镜 CATPart<br/>确认镜片/眼点/地面/车宽线名称"]
+  B{"CATIA 与输入<br/>是否可用?"}
+  C["错误提示<br/>一次性列出缺失项<br/>终止本次校核"]
+  D["2 服务调度<br/>FastAPI 保存输入<br/>启动独立 Worker<br/>WebSocket 推送进度"]
+  E["3 CATIA 自动建模<br/>确认车辆方向<br/>生成法规点/法规线<br/>创建参数化镜片"]
+  F["4 镜片偏转搜索<br/>生成临时反射点<br/>遍历水平/竖直角度<br/>选择最小视野四边形"]
+  G{"最终视野点<br/>是否满足 3mm 间隙?"}
+  H["通过路径<br/>记录最优偏转角<br/>输出偏转说明"]
+  I["未通过路径<br/>回退 0 度姿态<br/>保留反射点并记录风险"]
+  J["5 正式法规校核<br/>生成正式反射点<br/>测量到镜片边界距离<br/>执行二次校核"]
+  K["6 结果交付<br/>另存 CATPart<br/>创建距离标注装配<br/>输出截图和 Word 报告"]
+  Start --> A --> B
+  B -- 否 --> C --> End
+  B -- 是 --> D --> E --> F --> G
+  G -- 是 --> H --> J
+  G -- 否 --> I --> J
+  J --> K --> End
+  classDef startEnd fill:#DCFCE7,stroke:#16A34A,stroke-width:1.5px,color:#14532D
+  classDef main fill:#DBEAFE,stroke:#2563EB,stroke-width:1.4px,color:#1E3A8A
+  classDef algo fill:#FCE7F3,stroke:#DB2777,stroke-width:1.4px,color:#831843
+  classDef decision fill:#FEF3C7,stroke:#D97706,stroke-width:1.5px,color:#78350F
+  classDef warn fill:#FEE2E2,stroke:#DC2626,stroke-width:1.4px,color:#7F1D1D
+  classDef output fill:#F1F5F9,stroke:#64748B,stroke-width:1.4px,color:#334155
+  class Start,End startEnd
+  class A,D main
+  class E,F,J algo
+  class B,G decision
+  class C,I warn
+  class H,K output`;
+    async function renderDiagram() {
+      const result = await mermaid.render("rearview-explain-flowchart", diagram);
+      document.getElementById("diagram").innerHTML = result.svg;
+    }
+    function getSVGElement() { return document.querySelector("#diagram svg"); }
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    }
+    function downloadSVG() {
+      const svg = getSVGElement();
+      if (!svg) return;
+      const clone = svg.cloneNode(true);
+      clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      downloadBlob(new Blob(['<?xml version="1.0" encoding="UTF-8"?>', clone.outerHTML], { type: "image/svg+xml" }), "后视镜法规校核功能流程图-讲解版.svg");
+    }
+    function downloadPNG() {
+      const svg = getSVGElement();
+      if (!svg) return;
+      const clone = svg.cloneNode(true);
+      clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      const serialized = new XMLSerializer().serializeToString(clone);
+      const bounds = svg.getBoundingClientRect();
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.ceil(bounds.width * 2));
+      canvas.height = Math.max(1, Math.ceil(bounds.height * 2));
+      const ctx = canvas.getContext("2d");
+      ctx.scale(2, 2);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const image = new Image();
+      const url = URL.createObjectURL(new Blob(['<?xml version="1.0" encoding="UTF-8"?>', serialized], { type: "image/svg+xml" }));
+      image.onload = function () {
+        ctx.drawImage(image, 0, 0);
+        URL.revokeObjectURL(url);
+        canvas.toBlob(function (blob) {
+          if (blob) downloadBlob(blob, "后视镜法规校核功能流程图-讲解版.png");
+        });
+      };
+      image.src = url;
+    }
+    renderDiagram();
+  </script>
+</body>
+</html>
